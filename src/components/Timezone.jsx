@@ -1,17 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Navbar from "./Navbar";
 import BoxContainer from "./BoxContainer";
-import SideArrow from "../svg/SideArrow";
-import Button from "./Button";
-import TimingButton from "./TimingButton";
 import NavbarButton from "./NavbarButton";
-import PendingSVG from "../svg/PendingSVG";
-import CompletedSVG from "../svg/CompletedSVG";
-import CalendarSVG from "../svg/CalendarSVG";
-import AdjustManually from "../svg/AdjustManually";
-import Fullscreen from "../svg/Fullscreen";
+import { GlobalContext } from "../context/Context";
 
 function Timezone() {
+  const { hour, minute, ampm, is24Hr } = useContext(GlobalContext);
+
   return (
     <div className="flex flex-col h-[100vh] w-full">
       <Navbar
@@ -37,11 +32,17 @@ function Timezone() {
               </div>
               {/* <div className=" text-5xl sm:text-9xl font-sans font-medium text-zinc-50 flex text-end gap-3 py-10 px-2"> */}
               <div className="flex items-end my-2.5 font-mono text-5xl font-semibold tabular-nums md:text-7xl lg:text-9xl">
-                <p>25</p>
-                <p>:</p>
-                <p>00</p>
+                <p className="text-zinc-50">
+                  {is24Hr
+                    ? hour.toString().padStart(2, "0")
+                    : (hour % 12 === 0 ? 12 : hour % 12)
+                        .toString()
+                        .padStart(2, "0")}
+                </p>
+                <p className="animate-blink text-zinc-50">:</p>
+                <p className="text-zinc-50">{minute}</p>
                 <p className="ml-2 md:mb-2 lg:mb-4 font-sans text-lg mb-1 md:text-xl lg:text-2xl font-medium text-neutral-600">
-                  PM
+                  {ampm}
                 </p>
               </div>
               <div className=" border-b-zinc-400 flex items-center justify-center ">
@@ -89,11 +90,19 @@ function Timezone() {
                 </span>
                 <span className="flex items-center gap-1.5 font-mono text-sm text-zinc-50 sm:text-base">
                   <span className="ml-0.5 flex text-base sm:text-lg">
-                    <span>12</span>
-                    <span className="mx-0.5 font-sans ">:</span>
-                    <span>59</span>
+                    <span>
+                      {is24Hr
+                        ? hour.toString().padStart(2, "0")
+                        : (hour % 12 === 0 ? 12 : hour % 12)
+                            .toString()
+                            .padStart(2, "0")}
+                    </span>
+                    <span className="mx-0.5 font-sans animate-blink text-zinc-50 ">
+                      :
+                    </span>
+                    <span>{minute}</span>
                     <span className="ml-1 inline-block w-[31px] font-sans font-medium text-zinc-500">
-                      PM
+                      {ampm}
                     </span>
                   </span>
                 </span>

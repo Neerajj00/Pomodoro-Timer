@@ -5,12 +5,7 @@ import { GlobalContext } from "../context/Context";
 import SidebarElement from "./SidebarElement";
 
 function Sidebar() {
-  const { menuOpen, setMenuOpen } = useContext(GlobalContext);
-
-  function handleMenuToggle() {
-    setMenuOpen((prev) => !prev);
-    console.log("Toggled Menu:", menuOpen);
-  }
+  const { menuOpen, handleMenuToggle } = useContext(GlobalContext);
 
   return (
     <div

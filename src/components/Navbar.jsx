@@ -13,17 +13,17 @@ function Navbar({
   firstButtonText,
   secondButtonText,
 }) {
-  const { handleMenuOverlay } = useContext(GlobalContext);
-  const [is24Hr, setis24Hr] = useState(false);
-  const [hour, setHour] = useState(() => new Date().getHours());
-  const [minute, setMinute] = useState(() => new Date().getMinutes());
-  const [ampm, setAmpm] = useState(() =>
-    new Date().getHours() >= 12 ? "PM" : "AM"
-  );
-
-  const handle24HrChange = () => {
-    setis24Hr(!is24Hr);
-  };
+  const {
+    handleMenuOverlay,
+    setHour,
+    handle24HrChange,
+    setMinute,
+    setAmpm,
+    hour,
+    minute,
+    ampm,
+    is24Hr,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -92,11 +92,15 @@ function Navbar({
           <div className="hidden sm:flex h-full">
             <div className="h-full px-1 flex items-center gap-1 text-[14px]">
               <span className="text-zinc-50 tabular-nums">
-                {is24Hr ? hour.toString().padStart(2, "0") : (hour - 12).toString().padStart(2, "0")}
+                {is24Hr
+                  ? hour.toString().padStart(2, "0")
+                  : (hour % 12 === 0 ? 12 : hour % 12)
+                      .toString()
+                      .padStart(2, "0")}
               </span>
               <span className="animate-blink text-zinc-50">:</span>
               <span className="text-zinc-50 tabular-nums">
-                {minute.toString().padStart(2, "0")}
+                {minute}
               </span>
               <span>{ampm}</span>
             </div>
