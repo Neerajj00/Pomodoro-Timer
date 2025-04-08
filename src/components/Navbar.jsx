@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavbarButton from "./NavbarButton";
 import FolderIcon from "../svg/Foldericon";
 import GeneralSVG from "../svg/GeneralSVG";
@@ -7,29 +7,67 @@ import FocusSVG from "./../svg/FocusSVG";
 import HamburgerSVG from "./../svg/HamburgerSVG";
 import { GlobalContext } from "../context/Context";
 
-function Navbar({NavbarButton , leftMostText , firstButtonText , secondButtonText}) {
-  const {handleMenuOverlay} = useContext(GlobalContext);
+function Navbar({
+  NavbarButton,
+  leftMostText,
+  firstButtonText,
+  secondButtonText,
+}) {
+  const { handleMenuOverlay } = useContext(GlobalContext);
+  const [is24Hr, setis24Hr] = useState(false);
+  const [hour, setHour] = useState(() => new Date().getHours());
+  const [minute, setMinute] = useState(() => new Date().getMinutes());
+  const [ampm, setAmpm] = useState(() =>
+    new Date().getHours() >= 12 ? "PM" : "AM"
+  );
+
+  const handle24HrChange = () => {
+    setis24Hr(!is24Hr);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const date = new Date(); // <- Create NEW date every second
+      const currentHour = date.getHours();
+      setHour(currentHour);
+      setMinute(date.getMinutes());
+      setAmpm(currentHour >= 12 ? "PM" : "AM");
+    }, 1000);
+
+    // Clean up the interval when component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       {/* navbar */}
       <div className="flex h-[33px] justify-between  items-center text-[14px] text-center w-full bg-zinc-900 border-b border-b-zinc-800">
         <div className="flex gap-2 h-full">
-          <div 
-          onClick={handleMenuOverlay}
-          className="h-full bg-zinc-800 text-zinc-400 px-2 flex sm:hidden items-center gap-1 text-[14px] font-bold  cursor-pointer hover:bg-zinc-700 transition duration-100">
-            <HamburgerSVG/>
+          <div
+            onClick={handleMenuOverlay}
+            className="h-full bg-zinc-800 text-zinc-400 px-2 flex sm:hidden items-center gap-1 text-[14px] font-bold  cursor-pointer hover:bg-zinc-700 transition duration-100"
+          >
+            <HamburgerSVG />
           </div>
           <div className="py-1 flex">
             <div className="text-[14px]  font-sans hidden md:flex md:gap-2 ml-2">
-              <p className="p-0.5">
-                {leftMostText}
-              </p>
-              <p className= "text-zinc-700 mr-2 ">
-                /
-              </p>
+              <p className="p-0.5">{leftMostText}</p>
+              <p className="text-zinc-700 mr-2 ">/</p>
             </div>
-            { firstButtonText && <NavbarButton text={firstButtonText} Icon={FolderIcon} isArrow={true} />}
-            { secondButtonText && <NavbarButton text={secondButtonText} Icon={GeneralSVG} isArrow={true} />}
+            {firstButtonText && (
+              <NavbarButton
+                text={firstButtonText}
+                Icon={FolderIcon}
+                isArrow={true}
+              />
+            )}
+            {secondButtonText && (
+              <NavbarButton
+                text={secondButtonText}
+                Icon={GeneralSVG}
+                isArrow={true}
+              />
+            )}
           </div>
         </div>
         <div className="flex h-full gap-2">
@@ -53,13 +91,20 @@ function Navbar({NavbarButton , leftMostText , firstButtonText , secondButtonTex
           </div>
           <div className="hidden sm:flex h-full">
             <div className="h-full px-1 flex items-center gap-1 text-[14px]">
-              <span className="text-zinc-50 ">11</span>
-              <span>:</span>
-              <span className="text-zinc-50 ">20</span>
-              <span>AM</span>
+              <span className="text-zinc-50 tabular-nums">
+                {is24Hr ? hour.toString().padStart(2, "0") : (hour - 12).toString().padStart(2, "0")}
+              </span>
+              <span className="animate-blink text-zinc-50">:</span>
+              <span className="text-zinc-50 tabular-nums">
+                {minute.toString().padStart(2, "0")}
+              </span>
+              <span>{ampm}</span>
             </div>
-            <div className="h-full bg-zinc-800 text-zinc-400 px-2 flex items-center gap-1 text-[14px] font-bold  cursor-pointer hover:bg-zinc-700 ml-1 transition duration-100">
-              <span>12</span>
+            <div
+              onClick={handle24HrChange}
+              className="h-full bg-zinc-800 text-zinc-400 px-2 flex items-center gap-1 text-[14px] font-bold  cursor-pointer hover:bg-zinc-700 ml-1 transition duration-100"
+            >
+              <span>{is24Hr ? "24" : "12"}</span>
               <span>hr</span>
             </div>
           </div>

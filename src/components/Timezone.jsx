@@ -90,7 +90,7 @@ function Timezone() {
                 <span className="flex items-center gap-1.5 font-mono text-sm text-zinc-50 sm:text-base">
                   <span className="ml-0.5 flex text-base sm:text-lg">
                     <span>12</span>
-                    <span className="mx-0.5 font-sans">:</span>
+                    <span className="mx-0.5 font-sans ">:</span>
                     <span>59</span>
                     <span className="ml-1 inline-block w-[31px] font-sans font-medium text-zinc-500">
                       PM
