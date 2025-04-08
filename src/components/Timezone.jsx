@@ -5,7 +5,7 @@ import NavbarButton from "./NavbarButton";
 import { GlobalContext } from "../context/Context";
 
 function Timezone() {
-  const { hour, minute, ampm, is24Hr } = useContext(GlobalContext);
+  const { hour, minute, ampm, is24Hr , day,date,month,year,} = useContext(GlobalContext);
 
   return (
     <div className="flex flex-col h-[100vh] w-full">
@@ -47,7 +47,7 @@ function Timezone() {
               </div>
               <div className=" border-b-zinc-400 flex items-center justify-center ">
                 <p className="mt-1 border-b border-dashed border-zinc-700 pb-0.5 text-base text-gray-400 transition-colors hover:text-gray-300 hover:border-zinc-500 lg:mt-2 lg:text-xl relative cursor-pointer">
-                  Monday - April 07, 2025
+                  {`${day} - ${month} ${date}, ${year}`}
                 </p>
               </div>
             </div>

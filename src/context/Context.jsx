@@ -45,14 +45,25 @@ export default function GlobalState({ children }) {
   }
 
   // main functionality starts here
+  const now = new Date();
 
   const [is24Hr, setis24Hr] = useState(false);
-  const [hour, setHour] = useState(() => new Date().getHours());
-  const [minute, setMinute] = useState(() => new Date().getMinutes().toString()
+  const [hour, setHour] = useState(() => now.getHours());
+  const [minute, setMinute] = useState(() => now.getMinutes().toString()
   .padStart(2, "0"));
   const [ampm, setAmpm] = useState(() =>
-    new Date().getHours() >= 12 ? "PM" : "AM"
+    now.getHours() >= 12 ? "PM" : "AM"
   );
+
+  const [day] = useState(() =>
+    now.toLocaleDateString('en-US', { weekday: 'long' })
+  );
+  const [date] = useState(() => now.getDate());
+  const [month] = useState(() =>
+    now.toLocaleDateString('en-US', { month: 'long' })
+  );
+  const [year] = useState(() => now.getFullYear());
+
 
   const handle24HrChange = () => {
     setis24Hr(!is24Hr);
@@ -64,24 +75,17 @@ export default function GlobalState({ children }) {
     <GlobalContext.Provider
       value={{
         handle24HrChange,
-        setHour,
-        setMinute,
-        hour,
-        minute,
-        ampm,
-        is24Hr,
-        setis24Hr,
-        setAmpm,
-        handleMenuClose,
-        setIsWidthSmaller,
-        isWidthSmaller,
-        checkScreenSize,
-        setMenuOpen,
-        menuOpen,
-        displayMenuOverlay,
-        setDisplayMenuOverlay,
-        handleMenuOverlay,
-        handleMenuToggle,
+        day,date,month,year,
+        hour,minute,setHour,setMinute,
+        is24Hr,setis24Hr,
+        ampm,setAmpm,
+        isWidthSmaller,setIsWidthSmaller,
+        menuOpen,setMenuOpen,
+        displayMenuOverlay,setDisplayMenuOverlay,
+        handleMenuClose, // function
+        checkScreenSize, // function
+        handleMenuOverlay, //function
+        handleMenuToggle, // function
       }}
     >
       {children}
