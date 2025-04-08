@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
 import PendingSVG from "./../svg/PendingSVG";
@@ -10,8 +10,29 @@ import AdjustManually from "./../svg/AdjustManually";
 import Fullscreen from "./../svg/Fullscreen";
 import TimingButton from "./TimingButton";
 import BoxContainer from "./BoxContainer";
+import { GlobalContext } from "../context/Context";
 
 function Pomodoro() {
+  const {date , month} = useContext(GlobalContext);
+
+  const [Minute, setMinute] = useState("25");
+  const [Second, setSecond] = useState("00");
+
+  const [breakTime, setBreakTime] = useState("Focus");
+
+  const timeSettings = {
+    "Focus": ["25", "00"],
+    "Short Break": ["05", "00"],
+    "Long Break": ["15", "00"]
+  };
+  
+  function handleBreakTimeChange(buttonText) {
+    setBreakTime(buttonText);
+    const [min, sec] = timeSettings[buttonText] || ["25", "00"];
+    setMinute(min);
+    setSecond(sec);
+  }
+
   return (
     <div className="flex flex-col h-[100vh] w-full">
       <Navbar NavbarButton={NavbarButton} leftMostText={"Pomodoro"} firstButtonText={"Personal"} secondButtonText={"General"}/>
@@ -43,7 +64,7 @@ function Pomodoro() {
 
               <div className="text-center gap-2 flex justify-center ">
                 <NavbarButton
-                  text={"05 Apr"}
+                  text={`${date} ${month}`}
                   Icon={CalendarSVG}
                   isArrow={false}
                   classes={
@@ -103,14 +124,23 @@ function Pomodoro() {
           <div className="w-[307px] flex flex-col ">
             <div className="w-full flex flex-col items-center justify-center p-2">
               <div className="flex items-center justify-center gap-2 w-full">
-                <Button text={"Focus"} />
-                <Button text={"Short Break"} />
-                <Button text={"Long Break"} />
+                <Button
+                onClick={() => handleBreakTimeChange("Focus")}
+                text={"Focus"}
+                classes = {breakTime === "Focus" ? "bg-zinc-800" : ""} />
+                <Button 
+                onClick={() => handleBreakTimeChange("Short Break")}
+                text={"Short Break"}
+                classes = {breakTime === "Short Break" ? "bg-zinc-800" : ""} />
+                <Button
+                onClick={() => handleBreakTimeChange("Long Break")}
+                text={"Long Break"}
+                classes = {breakTime === "Long Break" ? "bg-zinc-800" : ""} />
               </div>
               <div className=" text-5xl sm:text-8xl font-sans font-bold text-zinc-50 flex text-end gap-3 py-10 px-2">
-                <p>25</p>
+                <p>{Minute}</p>
                 <p>:</p>
-                <p>00</p>
+                <p>{Second}</p>
               </div>
               <div className="rounded-xl bg-zinc-800 w-4/5 sm:w-full h-1" />
               <div className="flex gap-2 justify-evenly my-3 w-full">
@@ -120,7 +150,9 @@ function Pomodoro() {
                 <TimingButton time={"1"} />
               </div>
               <div className="mt-3">
-                <Button text={"Start"} isPlayButton={true} />
+                <Button text={"Start"}
+                classes={"bg-zinc-800"}
+                isPlayButton={true} />
               </div>
             </div>
           </div>

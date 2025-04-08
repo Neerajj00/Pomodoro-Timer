@@ -47,7 +47,7 @@ function Timezone() {
               </div>
               <div className=" border-b-zinc-400 flex items-center justify-center ">
                 <p className="mt-1 border-b border-dashed border-zinc-700 pb-0.5 text-base text-gray-400 transition-colors hover:text-gray-300 hover:border-zinc-500 lg:mt-2 lg:text-xl relative cursor-pointer">
-                  {`${day} - ${month} ${date.toString().padStart(2,0)}, ${year}`}
+                  {`${day} - ${month} ${date}, ${year}`}
                 </p>
               </div>
             </div>

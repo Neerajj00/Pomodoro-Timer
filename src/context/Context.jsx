@@ -58,7 +58,7 @@ export default function GlobalState({ children }) {
   const [day] = useState(() =>
     now.toLocaleDateString('en-US', { weekday: 'long' })
   );
-  const [date] = useState(() => now.getDate());
+  const [date] = useState(() => now.getDate().toString().padStart(2,0));
   const [month] = useState(() =>
     now.toLocaleDateString('en-US', { month: 'long' })
   );
