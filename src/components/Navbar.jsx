@@ -29,8 +29,8 @@ function Navbar({
     const interval = setInterval(() => {
       const date = new Date(); // <- Create NEW date every second
       const currentHour = date.getHours();
-      setHour(currentHour);
-      setMinute(date.getMinutes());
+      setHour(currentHour.toString().padStart(2, "0"));
+      setMinute(date.getMinutes().toString().padStart(2, "0"));
       setAmpm(currentHour >= 12 ? "PM" : "AM");
     }, 1000);
 
