@@ -13,6 +13,7 @@ import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
 import PauseButtonSVG from "../svg/PauseButtonSVG";
 import PlayButtonSVG from "./../svg/PlayButtonSVG";
+import ResetButtonSVG from "./../svg/ResetButtonSVG";
 
 function Pomodoro() {
   const { date, month } = useContext(GlobalContext);
@@ -35,12 +36,25 @@ function Pomodoro() {
     if (buttonText == "Long Break") {
       setTime(15 * 60);
     }
+    handleWidth();
   }
   function handleTimeUpdate(time) {
     let updateTime = parseInt(time) * 60;
     setTime((prev) => {
+      handleWidth();
       return prev + updateTime;
     });
+  }
+
+  function handleWidth() {
+    const totalSeconds =
+      breakTime === "Focus"
+        ? 25 * 60
+        : breakTime === "Short Break"
+        ? 5 * 60
+        : 15 * 60;
+    const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
+    return percentage;
   }
 
   function start() {
@@ -206,7 +220,13 @@ function Pomodoro() {
                 <p>:</p>
                 <p>{Time % 60 < 10 ? `0${Time % 60}` : `${Time % 60}`}</p>
               </div>
-              <div className="rounded-xl bg-zinc-800 w-4/5 sm:w-full h-1" />
+              <div className="rounded-xl bg-zinc-800 w-4/5 sm:w-full h-1 overflow-hidden">
+                <div
+                  className="bg-zinc-400 h-full transition-all duration-500"
+                  style={{ width: `${handleWidth()}%` }}
+                />
+              </div>
+
               <div className="flex gap-2 justify-evenly my-3 w-full">
                 <TimingButton
                   time={"25"}
@@ -261,6 +281,8 @@ function Pomodoro() {
                     onClick={() => reset()}
                     text={"Reset"}
                     classes={"bg-zinc-800"}
+                    isPlayButton={true}
+                    svg={<ResetButtonSVG />}
                   />
                 )}
               </div>
