@@ -15,7 +15,7 @@ function Sidebar() {
     >
       <div
         className={`hidden sm:flex ${
-          menuOpen ? "item-start" : "items-center "
+          menuOpen ? "item-start" : "items-start "
         } justify-center items-start flex-col gap-4`}
       >
         {/* button */}
