@@ -73,9 +73,19 @@ export default function GlobalState({ children }) {
     setDisplayAdjustManuallyOverlay((prev) => !prev);
   }
 
+  const [breakTimeOb, setBreakTimeOb] = useState({
+    Focus: { time: 25 * 60, isActive: true },
+    "Short Break": { time: 5 * 60, isActive: false },
+    "Long Break": { time: 15 * 60, isActive: false },
+  });
+  const [Time, setTime] = useState(25 * 60);
+  const [breakTime, setBreakTime] = useState("Focus");
+
   return (
     <GlobalContext.Provider
       value={{
+        Time, setTime ,breakTime, setBreakTime,
+        breakTimeOb, setBreakTimeOb,
         displayAdjustManuallyOverlay,
         setDisplayAdjustManuallyOverlay,
         handleAdjustManuallyOverlay,

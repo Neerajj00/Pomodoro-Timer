@@ -3,10 +3,8 @@ import { GlobalContext } from "../context/Context";
 import { X } from "lucide-react"; // (if you have lucide-react, else use plain text ×)
 
 function AdjustManuallyOverlay() {
-  const { handleAdjustManuallyOverlay } = useContext(GlobalContext);
-  const [pomodoro, setPomodoro] = useState(25);
-  const [shortBreak, setShortBreak] = useState(5);
-  const [longBreak, setLongBreak] = useState(15);
+  const { handleAdjustManuallyOverlay, setBreakTimeOb, breakTimeOb ,setTime , breakTime } =
+    useContext(GlobalContext);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
@@ -22,11 +20,28 @@ function AdjustManuallyOverlay() {
         </button>
 
         <div className="flex-1 gap-4">
-          <label className="text-gray-400 text-sm">Pomodoro duration (minutes)</label>
+          <label className="text-gray-400 text-sm">
+            Pomodoro duration (minutes)
+          </label>
           <input
             type="number"
-            value={pomodoro}
-            onChange={(e) => setPomodoro(e.target.value)}
+            value={breakTimeOb["Focus"].time / 60}
+            onChange={(e) => {
+              const newTime = e.target.value * 60; // convert to seconds
+            
+              setBreakTimeOb((prev) => ({
+                ...prev,
+                "Focus": {
+                  ...prev["Focus"],
+                  time: newTime,
+                },
+              }));
+            
+              if (breakTime === "Focus") {
+                setTime(newTime);
+              }
+            }}
+            
             className="w-full mt-1 mb-4 p-2 rounded bg-zinc-800 text-white outline-none"
           />
         </div>
@@ -36,8 +51,22 @@ function AdjustManuallyOverlay() {
             <label className="text-gray-400 text-sm">Short break (min)</label>
             <input
               type="number"
-              value={shortBreak}
-              onChange={(e) => setShortBreak(e.target.value)}
+              value={breakTimeOb["Short Break"].time / 60}
+              onChange={(e) => {
+                const newTime = e.target.value * 60; // convert to seconds
+              
+                setBreakTimeOb((prev) => ({
+                  ...prev,
+                  "Short Break": {
+                    ...prev["Short Break"],
+                    time: newTime,
+                  },
+                }));
+              
+                if (breakTime === "Short Break") {
+                  setTime(newTime);
+                }
+              }}
               className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
             />
           </div>
@@ -45,8 +74,22 @@ function AdjustManuallyOverlay() {
             <label className="text-gray-400 text-sm">Long break (min)</label>
             <input
               type="number"
-              value={longBreak}
-              onChange={(e) => setLongBreak(e.target.value)}
+              value={breakTimeOb["Long Break"].time / 60}
+              onChange={(e) => {
+                const newTime = e.target.value * 60; // convert to seconds
+              
+                setBreakTimeOb((prev) => ({
+                  ...prev,
+                  "Long Break": {
+                    ...prev["Long Break"],
+                    time: newTime,
+                  },
+                }));
+              
+                if (breakTime === "Long Break") {
+                  setTime(newTime);
+                }
+              }}
               className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
             />
           </div>

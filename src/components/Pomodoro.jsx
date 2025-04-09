@@ -16,17 +16,13 @@ import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
 
 function Pomodoro() {
-  const { date, month } = useContext(GlobalContext);
-  const [Time, setTime] = useState(25 * 60);
+  const { Time, setTime,date, month ,breakTimeOb ,breakTime, setBreakTime } = useContext(GlobalContext);
+  
   const [TimeStarted, setTimeStarted] = useState(false); // true = running
   const [HasStarted, setHasStarted] = useState(false); // true = if started once
   const [IsPaused, setIsPaused] = useState(false); // true = if paused
-  const [breakTime, setBreakTime] = useState("Focus");
-  const [breakTimeOb, setBreakTimeOb] = useState({
-    Focus: { time: 25 * 60, isActive: true },
-    "Short Break": { time: 5 * 60, isActive: false },
-    "Long Break": { time: 15 * 60, isActive: false },
-  });
+  
+  
 
   const intervalRef = useRef(null);
 
@@ -48,6 +44,7 @@ function Pomodoro() {
       return prev + updateTime;
     });
   }
+
   // Calculate progress width
   function handleWidth() {
     const totalSeconds = breakTimeOb[breakTime].time;
