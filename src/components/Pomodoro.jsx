@@ -16,13 +16,13 @@ import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
 
 function Pomodoro() {
-  const { Time, setTime,date, month ,breakTimeOb ,breakTime, setBreakTime } = useContext(GlobalContext);
-  
+  const { Time, setTime, date, month, breakTimeOb, breakTime, setBreakTime } =
+    useContext(GlobalContext);
+
   const [TimeStarted, setTimeStarted] = useState(false); // true = running
   const [HasStarted, setHasStarted] = useState(false); // true = if started once
   const [IsPaused, setIsPaused] = useState(false); // true = if paused
-  
-  
+  const alarmSound = new Audio("/audio/rooster.wav");
 
   const intervalRef = useRef(null);
 
@@ -36,7 +36,6 @@ function Pomodoro() {
     // Change break type and reset timer
     setBreakTime(buttonText);
     setTime(breakTimeOb[buttonText].time);
-
   }
   function handleTimeUpdate(time) {
     let updateTime = parseInt(time) * 60;
@@ -61,6 +60,23 @@ function Pomodoro() {
         if (prev > 0) return prev - 1;
         else {
           clearInterval(intervalRef.current);
+          let playCount = 0;
+          const maxPlays = 3;
+
+          const playAlarm = () => {
+            alarmSound.currentTime = 0;
+            alarmSound.play();
+            playCount++;
+
+            if (playCount < maxPlays) {
+              alarmSound.onended = playAlarm; // when current play ends, play again
+            } else {
+              alarmSound.onended = null; // after 3 times, clean up
+            }
+          };
+
+          // Start first play
+          playAlarm();
           return 0;
         }
       });
@@ -78,16 +94,7 @@ function Pomodoro() {
     setTimeStarted(false);
     setHasStarted(false);
     setIsPaused(false); // reset everything
-
-    if (breakTime === "Focus") {
-      setTime(breakTimeOb[breakTime].time);
-    }
-    if (breakTime === "Short Break") {
-      setTime(breakTimeOb[breakTime].time);
-    }
-    if (breakTime === "Long Break") {
-      setTime(breakTimeOb[breakTime].time);
-    }
+    setTime(breakTimeOb[breakTime].time);
   }
 
   return (
