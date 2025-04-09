@@ -8,6 +8,28 @@ export default function GlobalState({ children }) {
   // state that handles the size of the window used for showing play button svg on button when screen size is smalled
   const [isWidthSmaller, setIsWidthSmaller] = useState(false);
 
+  const [selectedSound, setSelectedSound] = useState("rooster.wav"); // default
+  const [audioPlayer, setAudioPlayer] = useState(null);
+
+  const playSound = (sound) => {
+    if (audioPlayer) {
+      audioPlayer.pause();
+      setAudioPlayer(null);
+    }
+    const newAudio = new Audio(`/audio/${sound}`);
+    newAudio.currentTime = 0;
+    newAudio.play().catch((error) => {
+      console.error("Audio play failed", error);
+    });
+    setAudioPlayer(newAudio);
+  };
+  const stopPlayingSound = () => {
+    if (audioPlayer) {
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+      setAudioPlayer(null);
+    }
+  };
   // function to check the size of the window
   function checkScreenSize() {
     setIsWidthSmaller(window.innerWidth < 640);
@@ -78,15 +100,23 @@ export default function GlobalState({ children }) {
     "Short Break": { time: 5 * 60 },
     "Long Break": { time: 15 * 60 },
   });
-  
+
   const [Time, setTime] = useState(25 * 60);
   const [breakTime, setBreakTime] = useState("Focus");
 
   return (
     <GlobalContext.Provider
       value={{
-        Time, setTime ,breakTime, setBreakTime,
-        breakTimeOb, setBreakTimeOb,
+        stopPlayingSound,
+        selectedSound,
+        setSelectedSound,
+        playSound,
+        Time,
+        setTime,
+        breakTime,
+        setBreakTime,
+        breakTimeOb,
+        setBreakTimeOb,
         displayAdjustManuallyOverlay,
         setDisplayAdjustManuallyOverlay,
         handleAdjustManuallyOverlay,

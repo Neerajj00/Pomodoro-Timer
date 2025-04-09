@@ -16,13 +16,20 @@ import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
 
 function Pomodoro() {
-  const { Time, setTime, date, month, breakTimeOb, breakTime, setBreakTime } =
-    useContext(GlobalContext);
+  const {
+    selectedSound,
+    Time,
+    setTime,
+    date,
+    month,
+    breakTimeOb,
+    breakTime,
+    setBreakTime,
+  } = useContext(GlobalContext);
 
   const [TimeStarted, setTimeStarted] = useState(false); // true = running
   const [HasStarted, setHasStarted] = useState(false); // true = if started once
   const [IsPaused, setIsPaused] = useState(false); // true = if paused
-  const alarmSound = new Audio("/audio/rooster.wav");
 
   const intervalRef = useRef(null);
 
@@ -43,14 +50,20 @@ function Pomodoro() {
       return prev + updateTime;
     });
   }
-
+  function stopAlarmSound() {
+    if (alarmSound) {
+      alarmSound.pause();            // Pause the sound
+      alarmSound.currentTime = 0;     // Optional: Reset to start
+      alarmSound.onended = null;      // VERY IMPORTANT: Remove the repeat handler
+    }
+  }
   // Calculate progress width
   function handleWidth() {
     const totalSeconds = breakTimeOb[breakTime].time;
     const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
     return percentage;
   }
-
+  const alarmSound = new Audio(`/audio/${selectedSound}`);
   function start() {
     setTimeStarted(true);
     setHasStarted(true);
@@ -270,7 +283,10 @@ function Pomodoro() {
 
                 {TimeStarted && (
                   <Button
-                    onClick={() => pause()}
+                    onClick={() => {
+                      pause();
+                      stopAlarmSound();
+                    }}
                     text={"Pause"}
                     classes={"bg-zinc-800"}
                     isPlayButton={true}
@@ -280,7 +296,10 @@ function Pomodoro() {
 
                 {HasStarted && (
                   <Button
-                    onClick={() => reset()}
+                    onClick={() => {
+                      reset();
+                      stopAlarmSound();
+                    }}
                     text={"Reset"}
                     classes={"bg-zinc-800"}
                     isPlayButton={true}
