@@ -27,21 +27,20 @@ function Pomodoro() {
     "Short Break": { time: 5 * 60, isActive: false },
     "Long Break": { time: 15 * 60, isActive: false },
   });
-  
 
   const intervalRef = useRef(null);
 
   function handleBreakTimeChange(buttonText) {
+    // Stop everything first
+    clearInterval(intervalRef.current);
+    setTimeStarted(false);
+    setHasStarted(false);
+    setIsPaused(false);
+
+    // Change break type and reset timer
     setBreakTime(buttonText);
-    if (buttonText == "Focus") {
-      setTime(breakTimeOb[buttonText].time);
-    }
-    if (buttonText == "Short Break") {
-      setTime(breakTimeOb[buttonText].time);
-    }
-    if (buttonText == "Long Break") {
-      setTime(breakTimeOb[buttonText].time);
-    }
+    setTime(breakTimeOb[buttonText].time);
+
   }
   function handleTimeUpdate(time) {
     let updateTime = parseInt(time) * 60;
@@ -50,11 +49,11 @@ function Pomodoro() {
     });
   }
   // Calculate progress width
-function handleWidth() {
-  const totalSeconds = breakTimeOb[breakTime].time;
-  const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
-  return percentage;
-}
+  function handleWidth() {
+    const totalSeconds = breakTimeOb[breakTime].time;
+    const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
+    return percentage;
+  }
 
   function start() {
     setTimeStarted(true);
