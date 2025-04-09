@@ -22,40 +22,39 @@ function Pomodoro() {
   const [HasStarted, setHasStarted] = useState(false); // true = if started once
   const [IsPaused, setIsPaused] = useState(false); // true = if paused
   const [breakTime, setBreakTime] = useState("Focus");
+  const [breakTimeOb, setBreakTimeOb] = useState({
+    Focus: { time: 25 * 60, isActive: true },
+    "Short Break": { time: 5 * 60, isActive: false },
+    "Long Break": { time: 15 * 60, isActive: false },
+  });
+  
 
   const intervalRef = useRef(null);
 
   function handleBreakTimeChange(buttonText) {
     setBreakTime(buttonText);
     if (buttonText == "Focus") {
-      setTime(25 * 60);
+      setTime(breakTimeOb[buttonText].time);
     }
     if (buttonText == "Short Break") {
-      setTime(5 * 60);
+      setTime(breakTimeOb[buttonText].time);
     }
     if (buttonText == "Long Break") {
-      setTime(15 * 60);
+      setTime(breakTimeOb[buttonText].time);
     }
-    handleWidth();
   }
   function handleTimeUpdate(time) {
     let updateTime = parseInt(time) * 60;
     setTime((prev) => {
-      handleWidth();
       return prev + updateTime;
     });
   }
-
-  function handleWidth() {
-    const totalSeconds =
-      breakTime === "Focus"
-        ? 25 * 60
-        : breakTime === "Short Break"
-        ? 5 * 60
-        : 15 * 60;
-    const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
-    return percentage;
-  }
+  // Calculate progress width
+function handleWidth() {
+  const totalSeconds = breakTimeOb[breakTime].time;
+  const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
+  return percentage;
+}
 
   function start() {
     setTimeStarted(true);
@@ -85,13 +84,13 @@ function Pomodoro() {
     setIsPaused(false); // reset everything
 
     if (breakTime === "Focus") {
-      setTime(25 * 60);
+      setTime(breakTimeOb[breakTime].time);
     }
     if (breakTime === "Short Break") {
-      setTime(5 * 60);
+      setTime(breakTimeOb[breakTime].time);
     }
     if (breakTime === "Long Break") {
-      setTime(15 * 60);
+      setTime(breakTimeOb[breakTime].time);
     }
   }
 
