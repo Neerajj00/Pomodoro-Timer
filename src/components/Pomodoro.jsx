@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
 import PendingSVG from "./../svg/PendingSVG";
@@ -11,36 +11,75 @@ import Fullscreen from "./../svg/Fullscreen";
 import TimingButton from "./TimingButton";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
+import PauseButtonSVG from "../svg/PauseButtonSVG";
+import PlayButtonSVG from "./../svg/PlayButtonSVG";
 
 function Pomodoro() {
   const { date, month } = useContext(GlobalContext);
-
-  const [Time, setTime] = useState(60)
-
+  const [Time, setTime] = useState(25 * 60);
+  const [TimeStarted, setTimeStarted] = useState(false); // true = running
+  const [HasStarted, setHasStarted] = useState(false); // true = if started once
+  const [IsPaused, setIsPaused] = useState(false); // true = if paused
   const [breakTime, setBreakTime] = useState("Focus");
+
+  const intervalRef = useRef(null);
 
   function handleBreakTimeChange(buttonText) {
     setBreakTime(buttonText);
-    if(buttonText == "Focus"){
+    if (buttonText == "Focus") {
       setTime(25 * 60);
     }
-    if(buttonText == "Short Break"){
+    if (buttonText == "Short Break") {
       setTime(5 * 60);
     }
-    if(buttonText == "Long Break"){
+    if (buttonText == "Long Break") {
       setTime(15 * 60);
     }
   }
+  function handleTimeUpdate(time) {
+    let updateTime = parseInt(time) * 60;
+    setTime((prev) => {
+      return prev + updateTime;
+    });
+  }
 
   function start() {
-    setInterval(()=>{
-      setTime((prev)=>{
-        if(prev > 0) return prev - 1;
-        else return 0;
-      })
-    },1000)
+    setTimeStarted(true);
+    setHasStarted(true);
+    setIsPaused(false); // no longer paused
+    intervalRef.current = setInterval(() => {
+      setTime((prev) => {
+        if (prev > 0) return prev - 1;
+        else {
+          clearInterval(intervalRef.current);
+          return 0;
+        }
+      });
+    }, 1000);
   }
-  
+
+  function pause() {
+    setTimeStarted(false);
+    setIsPaused(true); // now paused
+    clearInterval(intervalRef.current);
+  }
+
+  function reset() {
+    clearInterval(intervalRef.current);
+    setTimeStarted(false);
+    setHasStarted(false);
+    setIsPaused(false); // reset everything
+
+    if (breakTime === "Focus") {
+      setTime(25 * 60);
+    }
+    if (breakTime === "Short Break") {
+      setTime(5 * 60);
+    }
+    if (breakTime === "Long Break") {
+      setTime(15 * 60);
+    }
+  }
 
   return (
     <div className="flex flex-col h-[100vh] w-full">
@@ -159,24 +198,71 @@ function Pomodoro() {
                 />
               </div>
               <div className=" text-5xl sm:text-8xl font-sans font-bold text-zinc-50 flex text-end gap-3 py-10 px-2">
-                <p>{Math.floor(Time / 60) < 10 ? `0${Math.floor(Time / 60)}` : `${Math.floor(Time / 60)}`}</p>
+                <p>
+                  {Math.floor(Time / 60) < 10
+                    ? `0${Math.floor(Time / 60)}`
+                    : `${Math.floor(Time / 60)}`}
+                </p>
                 <p>:</p>
-                <p>{ Time % 60 < 10 ? `0${Time % 60}` : `${Time % 60}`}</p>
+                <p>{Time % 60 < 10 ? `0${Time % 60}` : `${Time % 60}`}</p>
               </div>
               <div className="rounded-xl bg-zinc-800 w-4/5 sm:w-full h-1" />
               <div className="flex gap-2 justify-evenly my-3 w-full">
-                <TimingButton time={"25"} />
-                <TimingButton time={"10"} />
-                <TimingButton time={"5"} />
-                <TimingButton time={"1"} />
-              </div>
-              <div className="mt-3">
-                <Button
-                  onClick={() => start()}
-                  text={"Start"}
-                  classes={"bg-zinc-800"}
-                  isPlayButton={true}
+                <TimingButton
+                  time={"25"}
+                  onClick={() => handleTimeUpdate("25")}
                 />
+                <TimingButton
+                  time={"10"}
+                  onClick={() => handleTimeUpdate("10")}
+                />
+                <TimingButton
+                  time={"5"}
+                  onClick={() => handleTimeUpdate("5")}
+                />
+                <TimingButton
+                  time={"1"}
+                  onClick={() => handleTimeUpdate("1")}
+                />
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                {!TimeStarted && !IsPaused && (
+                  <Button
+                    onClick={() => start()}
+                    text={"Start"}
+                    classes={"bg-zinc-800"}
+                    isPlayButton={true}
+                    svg={<PlayButtonSVG />}
+                  />
+                )}
+
+                {!TimeStarted && IsPaused && (
+                  <Button
+                    onClick={() => start()}
+                    text={"Resume"}
+                    classes={"bg-zinc-800"}
+                    isPlayButton={true}
+                    svg={<PlayButtonSVG />}
+                  />
+                )}
+
+                {TimeStarted && (
+                  <Button
+                    onClick={() => pause()}
+                    text={"Pause"}
+                    classes={"bg-zinc-800"}
+                    isPlayButton={true}
+                    svg={<PauseButtonSVG />}
+                  />
+                )}
+
+                {HasStarted && (
+                  <Button
+                    onClick={() => reset()}
+                    text={"Reset"}
+                    classes={"bg-zinc-800"}
+                  />
+                )}
               </div>
             </div>
           </div>
