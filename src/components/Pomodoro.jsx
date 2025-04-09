@@ -51,50 +51,58 @@ function Pomodoro() {
     });
   }
   function stopAlarmSound() {
-    if (alarmSound) {
-      alarmSound.pause();            // Pause the sound
-      alarmSound.currentTime = 0;     // Optional: Reset to start
-      alarmSound.onended = null;      // VERY IMPORTANT: Remove the repeat handler
+    if (alarmSoundRef.current) {
+      alarmSoundRef.current.pause();
+      alarmSoundRef.current.currentTime = 0;
+      alarmSoundRef.current.onended = null;
+      alarmSoundRef.current = null;
     }
   }
+  
   // Calculate progress width
   function handleWidth() {
     const totalSeconds = breakTimeOb[breakTime].time;
     const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
     return percentage;
   }
-  const alarmSound = new Audio(`/audio/${selectedSound}`);
+  const alarmSoundRef = useRef(null);
+
   function start() {
     setTimeStarted(true);
     setHasStarted(true);
-    setIsPaused(false); // no longer paused
+    setIsPaused(false);
+  
     intervalRef.current = setInterval(() => {
       setTime((prev) => {
         if (prev > 0) return prev - 1;
         else {
           clearInterval(intervalRef.current);
+  
           let playCount = 0;
           const maxPlays = 3;
-
+  
           const playAlarm = () => {
-            alarmSound.currentTime = 0;
-            alarmSound.play();
+            if (!alarmSoundRef.current) {
+              alarmSoundRef.current = new Audio(`/audio/${selectedSound}`);
+            }
+            alarmSoundRef.current.currentTime = 0;
+            alarmSoundRef.current.play();
             playCount++;
-
+  
             if (playCount < maxPlays) {
-              alarmSound.onended = playAlarm; // when current play ends, play again
+              alarmSoundRef.current.onended = playAlarm;
             } else {
-              alarmSound.onended = null; // after 3 times, clean up
+              alarmSoundRef.current.onended = null;
             }
           };
-
-          // Start first play
+  
           playAlarm();
           return 0;
         }
       });
     }, 1000);
   }
+  
 
   function pause() {
     setTimeStarted(false);
@@ -211,17 +219,26 @@ function Pomodoro() {
             <div className="w-full flex flex-col items-center justify-center p-2">
               <div className="flex items-center justify-center gap-2 w-full">
                 <Button
-                  onClick={() => handleBreakTimeChange("Focus")}
+                  onClick={() => {
+                    handleBreakTimeChange("Focus");
+                    stopAlarmSound();
+                  }}
                   text={"Focus"}
                   classes={breakTime === "Focus" ? "bg-zinc-800" : ""}
                 />
                 <Button
-                  onClick={() => handleBreakTimeChange("Short Break")}
+                  onClick={() => {
+                    handleBreakTimeChange("Short Break");
+                    stopAlarmSound();
+                  }}
                   text={"Short Break"}
                   classes={breakTime === "Short Break" ? "bg-zinc-800" : ""}
                 />
                 <Button
-                  onClick={() => handleBreakTimeChange("Long Break")}
+                  onClick={() => {
+                    handleBreakTimeChange("Long Break");
+                    stopAlarmSound();
+                  }}
                   text={"Long Break"}
                   classes={breakTime === "Long Break" ? "bg-zinc-800" : ""}
                 />
