@@ -18,7 +18,6 @@ function AdjustManuallyOverlay() {
           {/* OR if you don't have lucide-react installed, just use: × */}
           {/* × */}
         </button>
-
         <div className="flex-1 gap-4">
           <label className="text-gray-400 text-sm">
             Pomodoro duration (minutes)
