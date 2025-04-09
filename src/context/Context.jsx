@@ -49,39 +49,55 @@ export default function GlobalState({ children }) {
 
   const [is24Hr, setis24Hr] = useState(false);
   const [hour, setHour] = useState(() => now.getHours());
-  const [minute, setMinute] = useState(() => now.getMinutes().toString()
-  .padStart(2, "0"));
-  const [ampm, setAmpm] = useState(() =>
-    now.getHours() >= 12 ? "PM" : "AM"
+  const [minute, setMinute] = useState(() =>
+    now.getMinutes().toString().padStart(2, "0")
   );
+  const [ampm, setAmpm] = useState(() => (now.getHours() >= 12 ? "PM" : "AM"));
 
   const [day] = useState(() =>
-    now.toLocaleDateString('en-US', { weekday: 'long' })
+    now.toLocaleDateString("en-US", { weekday: "long" })
   );
-  const [date] = useState(() => now.getDate().toString().padStart(2,0));
+  const [date] = useState(() => now.getDate().toString().padStart(2, 0));
   const [month] = useState(() =>
-    now.toLocaleDateString('en-US', { month: 'long' })
+    now.toLocaleDateString("en-US", { month: "long" })
   );
   const [year] = useState(() => now.getFullYear());
-
 
   const handle24HrChange = () => {
     setis24Hr(!is24Hr);
   };
+  const [displayAdjustManuallyOverlay, setDisplayAdjustManuallyOverlay] =
+    useState(false);
 
-
+  function handleAdjustManuallyOverlay() {
+    setDisplayAdjustManuallyOverlay((prev) => !prev);
+  }
 
   return (
     <GlobalContext.Provider
       value={{
+        displayAdjustManuallyOverlay,
+        setDisplayAdjustManuallyOverlay,
+        handleAdjustManuallyOverlay,
         handle24HrChange,
-        day,date,month,year,
-        hour,minute,setHour,setMinute,
-        is24Hr,setis24Hr,
-        ampm,setAmpm,
-        isWidthSmaller,setIsWidthSmaller,
-        menuOpen,setMenuOpen,
-        displayMenuOverlay,setDisplayMenuOverlay,
+        day,
+        date,
+        month,
+        year,
+        hour,
+        minute,
+        setHour,
+        setMinute,
+        is24Hr,
+        setis24Hr,
+        ampm,
+        setAmpm,
+        isWidthSmaller,
+        setIsWidthSmaller,
+        menuOpen,
+        setMenuOpen,
+        displayMenuOverlay,
+        setDisplayMenuOverlay,
         handleMenuClose, // function
         checkScreenSize, // function
         handleMenuOverlay, //function
