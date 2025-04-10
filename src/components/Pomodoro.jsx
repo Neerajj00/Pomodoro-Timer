@@ -17,6 +17,7 @@ import ResetButtonSVG from "./../svg/ResetButtonSVG";
 
 function Pomodoro() {
   const {
+    sessionStartTime, setSessionStartTime,
     selectedSound,
     Time,
     setTime,
@@ -34,22 +35,23 @@ function Pomodoro() {
   const intervalRef = useRef(null);
 
   function handleBreakTimeChange(buttonText) {
-    // Stop everything first
     clearInterval(intervalRef.current);
     setTimeStarted(false);
     setHasStarted(false);
     setIsPaused(false);
-
-    // Change break type and reset timer
+  
     setBreakTime(buttonText);
     setTime(breakTimeOb[buttonText].time);
+    setSessionStartTime(breakTimeOb[buttonText].time); // 🔥 New Line
   }
+  
+  
   function handleTimeUpdate(time) {
-    let updateTime = parseInt(time) * 60;
-    setTime((prev) => {
-      return prev + updateTime;
-    });
+    const updateTime = parseInt(time) * 60;
+    setTime((prev) => prev + updateTime);
+    setSessionStartTime((prev) => prev + updateTime); // 🔥 New Line
   }
+  
   function stopAlarmSound() {
     if (alarmSoundRef.current) {
       alarmSoundRef.current.pause();
@@ -65,6 +67,12 @@ function Pomodoro() {
     const percentage = ((totalSeconds - Time) / totalSeconds) * 100;
     return percentage;
   }
+  function handleWidth() {
+    const percentage = ((sessionStartTime - Time) / sessionStartTime) * 100;
+    return percentage;
+  }
+  
+  
   const alarmSoundRef = useRef(null);
 
   function start() {

@@ -103,10 +103,13 @@ export default function GlobalState({ children }) {
 
   const [Time, setTime] = useState(25 * 60);
   const [breakTime, setBreakTime] = useState("Focus");
+  const [sessionStartTime, setSessionStartTime] = useState(breakTimeOb[breakTime].time);
+
 
   return (
     <GlobalContext.Provider
       value={{
+        sessionStartTime, setSessionStartTime,
         stopPlayingSound,
         selectedSound,
         setSelectedSound,

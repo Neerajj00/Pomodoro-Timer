@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 
 function AdjustManuallyOverlay() {
   const {
+    sessionStartTime, setSessionStartTime,
     stopPlayingSound,
     playSound,
     selectedSound,
@@ -53,6 +54,7 @@ function AdjustManuallyOverlay() {
               }));
               if (breakTime === "Focus") {
                 setTime(newTime);
+                setSessionStartTime(newTime); // 🔥 ADD THIS
               }
             }}
             className="w-full mt-1 mb-4 p-2 rounded bg-zinc-800 text-white outline-none"
@@ -76,6 +78,7 @@ function AdjustManuallyOverlay() {
                 }));
                 if (breakTime === "Short Break") {
                   setTime(newTime);
+                  setSessionStartTime(newTime); // 🔥 ADD THIS
                 }
               }}
               className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
@@ -97,6 +100,7 @@ function AdjustManuallyOverlay() {
                 }));
                 if (breakTime === "Long Break") {
                   setTime(newTime);
+                  setSessionStartTime(newTime); // 🔥 ADD THIS
                 }
               }}
               className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
