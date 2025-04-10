@@ -14,9 +14,11 @@ import { GlobalContext } from "../context/Context";
 import PauseButtonSVG from "../svg/PauseButtonSVG";
 import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
+import SmallScreenSVG from './../svg/SmallScreenSVG';
 
 function Pomodoro() {
   const {
+    isFullScreen, 
     sessionStartTime, setSessionStartTime,
     selectedSound,
     Time,
@@ -134,17 +136,17 @@ function Pomodoro() {
 
   return (
     <div className="flex flex-col h-[100vh] w-full">
-      <Navbar
+      {!isFullScreen && <Navbar
         NavbarButton={NavbarButton}
         leftMostText={"Pomodoro"}
         firstButtonText={"Personal"}
         secondButtonText={"General"}
-      />
+      />}
 
       {/* main content */}
       <div className="h-full flex flex-1 flex-grow flex-col-reverse lg:flex-row gap-3 p-3 ">
         {/* leftpart */}
-        <BoxContainer classes={"h-[192px] sm:h-full lg:w-[398px] bg-amber-400"}>
+        {!isFullScreen && <BoxContainer classes={"h-[192px] sm:h-full lg:w-[398px] bg-amber-400"}>
           <div className="h-full w-full flex flex-col">
             <header className="flex items-center justify-between">
               <div className="flex items-center text-center gap-2 ">
@@ -215,7 +217,7 @@ function Pomodoro() {
               </div>
             </div>
           </div>
-        </BoxContainer>
+        </BoxContainer>}
 
         {/* rightpart */}
         {/* <div className=" h-full flex p-4 items-center flex-col justify-between w-full rounded-2xl  bg-zinc-900  "> */}
@@ -226,7 +228,7 @@ function Pomodoro() {
         >
           <div className="w-full flex gap-1 items-end justify-end">
             <AdjustManually />
-            <Fullscreen />
+            {!isFullScreen ? <Fullscreen /> : <SmallScreenSVG/>}
           </div>
 
           <div className="w-[307px] flex flex-col ">

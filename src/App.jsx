@@ -6,14 +6,14 @@ import { GlobalContext } from './context/Context';
 import AdjustManuallyOverlay from './components/AdjustManuallyOverlay';
 
 function App() {
-  const { displayMenuOverlay ,displayAdjustManuallyOverlay } = useContext(GlobalContext);
+  const {isFullScreen, displayMenuOverlay ,displayAdjustManuallyOverlay } = useContext(GlobalContext);
 
   return (
     <>
     {displayMenuOverlay && <MenuOverlay/>}
     {displayAdjustManuallyOverlay && <AdjustManuallyOverlay />}
     <div className='flex flex-row h-[100vh] z-10'>
-      <Sidebar/>
+      {!isFullScreen && <Sidebar/>}
       <main className='main-content bg-black w-full h-[100vh]'>
         <Outlet />
       </main>

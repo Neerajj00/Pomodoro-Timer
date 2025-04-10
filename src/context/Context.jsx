@@ -11,6 +11,8 @@ export default function GlobalState({ children }) {
   const [selectedSound, setSelectedSound] = useState("rooster.wav"); // default
   const [audioPlayer, setAudioPlayer] = useState(null);
 
+  const [isFullScreen, setisFullScreen] = useState(false);
+
   const playSound = (sound) => {
     if (audioPlayer) {
       audioPlayer.pause();
@@ -109,6 +111,7 @@ export default function GlobalState({ children }) {
   return (
     <GlobalContext.Provider
       value={{
+        isFullScreen, setisFullScreen,
         sessionStartTime, setSessionStartTime,
         stopPlayingSound,
         selectedSound,
