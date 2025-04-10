@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { GlobalContext } from "../context/Context";
 import { X } from "lucide-react";
 
 function AdjustManuallyOverlay() {
   const {
-    sessionStartTime, setSessionStartTime,
+    setSessionStartTime,
     stopPlayingSound,
     playSound,
     selectedSound,
@@ -15,6 +15,48 @@ function AdjustManuallyOverlay() {
     setTime,
     breakTime,
   } = useContext(GlobalContext);
+
+  
+  const [localBreakTimes, setLocalBreakTimes] = useState({
+    Focus: breakTimeOb["Focus"].time / 60,
+    "Short Break": breakTimeOb["Short Break"].time / 60,
+    "Long Break": breakTimeOb["Long Break"].time / 60,
+  });
+
+
+  function handleUpdateSettings() {
+
+    // 2. Update breakTimeOb fully
+    setBreakTimeOb({
+      Focus: { time: localBreakTimes["Focus"] * 60 },
+      "Short Break": { time: localBreakTimes["Short Break"] * 60 },
+      "Long Break": { time: localBreakTimes["Long Break"] * 60 },
+    });
+
+    // 3. Update sessionStartTime and Time for currently active session
+    if (breakTime === "Focus") {
+      setTime(localBreakTimes["Focus"] * 60);
+      setSessionStartTime(localBreakTimes["Focus"] * 60);
+    } else if (breakTime === "Short Break") {
+      setTime(localBreakTimes["Short Break"] * 60);
+      setSessionStartTime(localBreakTimes["Short Break"] * 60);
+    } else if (breakTime === "Long Break") {
+      setTime(localBreakTimes["Long Break"] * 60);
+      setSessionStartTime(localBreakTimes["Long Break"] * 60);
+    }
+
+    // 4. Close overlay
+    handleAdjustManuallyOverlay();
+    stopPlayingSound();
+  }
+
+  // Array for looping
+  const timeOptions = [
+    { label: "Pomodoro duration (minutes)", key: "Focus" },
+    { label: "Short break (min)", key: "Short Break" },
+    { label: "Long break (min)", key: "Long Break" },
+  ];
+
 
   const handleSoundSelect = (sound) => {
     setSelectedSound(sound);
@@ -36,123 +78,50 @@ function AdjustManuallyOverlay() {
         </button>
 
         {/* Time Inputs */}
-        <div className="flex-1 gap-4">
-          <label className="text-gray-400 text-sm">
-            Pomodoro duration (minutes)
-          </label>
-          <input
-            type="number"
-            value={breakTimeOb["Focus"].time / 60}
-            onChange={(e) => {
-              const newTime = e.target.value * 60;
-              setBreakTimeOb((prev) => ({
-                ...prev,
-                Focus: {
-                  ...prev["Focus"],
-                  time: newTime,
-                },
-              }));
-              if (breakTime === "Focus") {
-                setTime(newTime);
-                setSessionStartTime(newTime); // 🔥 ADD THIS
-              }
-            }}
-            className="w-full mt-1 mb-4 p-2 rounded bg-zinc-800 text-white outline-none"
-          />
-        </div>
-
-        <div className="flex gap-4 mb-6">
-          <div className="flex-1">
-            <label className="text-gray-400 text-sm">Short break (min)</label>
-            <input
-              type="number"
-              value={breakTimeOb["Short Break"].time / 60}
-              onChange={(e) => {
-                const newTime = e.target.value * 60;
-                setBreakTimeOb((prev) => ({
-                  ...prev,
-                  "Short Break": {
-                    ...prev["Short Break"],
-                    time: newTime,
-                  },
-                }));
-                if (breakTime === "Short Break") {
-                  setTime(newTime);
-                  setSessionStartTime(newTime); // 🔥 ADD THIS
-                }
-              }}
-              className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="text-gray-400 text-sm">Long break (min)</label>
-            <input
-              type="number"
-              value={breakTimeOb["Long Break"].time / 60}
-              onChange={(e) => {
-                const newTime = e.target.value * 60;
-                setBreakTimeOb((prev) => ({
-                  ...prev,
-                  "Long Break": {
-                    ...prev["Long Break"],
-                    time: newTime,
-                  },
-                }));
-                if (breakTime === "Long Break") {
-                  setTime(newTime);
-                  setSessionStartTime(newTime); // 🔥 ADD THIS
-                }
-              }}
-              className="w-full p-2 rounded bg-zinc-800 text-white outline-none mt-1"
-            />
-          </div>
+        <div className="flex flex-col gap-4">
+          {timeOptions.map((option) => (
+            <div key={option.key}>
+              <label className="text-gray-400 text-sm">{option.label}</label>
+              <input
+                type="number"
+                value={localBreakTimes[option.key]}
+                onChange={(e) => {
+                  const newMinutes = Math.max(0, e.target.value);
+                  setLocalBreakTimes((prev) => ({
+                    ...prev,
+                    [option.key]: newMinutes,
+                  }));
+                }}
+                className="w-full mt-1 p-2 rounded bg-zinc-800 text-white outline-none"
+              />
+            </div>
+          ))}
         </div>
 
         {/* Sound Selection */}
-        <div className="mb-6">
+        <div className="mt-6 mb-6">
           <label className="text-gray-400 text-sm mb-2 block">
             Select Alarm Sound:
           </label>
           <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleSoundSelect("rooster.wav")}
-              className={`p-2 rounded ${
-                selectedSound === "rooster.wav" ? "bg-green-600" : "bg-zinc-700"
-              } text-white hover:bg-zinc-600 transition`}
-            >
-              Rooster
-            </button>
-            <button
-              onClick={() => handleSoundSelect("digital.wav")}
-              className={`p-2 rounded ${
-                selectedSound === "digital.wav" ? "bg-green-600" : "bg-zinc-700"
-              } text-white hover:bg-zinc-600 transition`}
-            >
-              Digital
-            </button>
-            <button
-              onClick={() => handleSoundSelect("emergency.wav")}
-              className={`p-2 rounded ${
-                selectedSound === "emergency.wav" ? "bg-green-600" : "bg-zinc-700"
-              } text-white hover:bg-zinc-600 transition`}
-            >
-              Emergency
-            </button>
-            <button
-              onClick={() => handleSoundSelect("fire.wav")}
-              className={`p-2 rounded ${
-                selectedSound === "fire.wav" ? "bg-green-600" : "bg-zinc-700"
-              } text-white hover:bg-zinc-600 transition`}
-            >
-              Fire
-            </button>
+            {["rooster.wav", "digital.wav", "emergency.wav", "fire.wav"].map(
+              (sound) => (
+                <button
+                  key={sound}
+                  onClick={() => handleSoundSelect(sound)}
+                  className={`p-2 rounded ${
+                    selectedSound === sound ? "bg-green-600" : "bg-zinc-700"
+                  } text-white hover:bg-zinc-600 transition`}
+                >
+                  {sound.split(".")[0]}
+                </button>
+              )
+            )}
           </div>
         </div>
 
         <button
-          onClick={() => {
-            handleAdjustManuallyOverlay();stopPlayingSound();
-          }}
+          onClick={handleUpdateSettings}
           className="w-full bg-zinc-700 text-white p-2 rounded hover:bg-zinc-600 transition"
         >
           Update Settings
