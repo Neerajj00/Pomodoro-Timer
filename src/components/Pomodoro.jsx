@@ -100,7 +100,13 @@ function Pomodoro() {
             if (playCount < maxPlays) {
               alarmSoundRef.current.onended = playAlarm;
             } else {
-              alarmSoundRef.current.onended = null;
+              alarmSoundRef.current.onended = () => {
+                // After 3rd play finishes
+                alarmSoundRef.current = null;
+        
+                // Reset timer flags back to idle state
+                reset(); // ✅ because session is completed
+              };
             }
           };
   
