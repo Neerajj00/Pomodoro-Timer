@@ -5,9 +5,9 @@ import Button from "./Button";
 import Fullscreen from "./../svg/Fullscreen";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
-import PauseButtonSVG from './../svg/PauseButtonSVG';
-import ResetButtonSVG from './../svg/ResetButtonSVG';
-import PlayButtonSVG from './../svg/PlayButtonSVG';
+import PauseButtonSVG from "./../svg/PauseButtonSVG";
+import ResetButtonSVG from "./../svg/ResetButtonSVG";
+import PlayButtonSVG from "./../svg/PlayButtonSVG";
 
 function Dailyplanner() {
   const { isFullScreen, selectedSound } = useContext(GlobalContext);
@@ -19,8 +19,8 @@ function Dailyplanner() {
   const [HasStarted, setHasStarted] = useState(false);
   // const [isInBreak, setIsInBreak] = useState(false);
 
-  function stopAlarmSound(){
-    if(soundRef.current){
+  function stopAlarmSound() {
+    if (soundRef.current) {
       soundRef.current.pause();
       soundRef.current.currentTime = 0;
     }
@@ -35,19 +35,18 @@ function Dailyplanner() {
 
   const timerRef = useRef(null); // store interval ID
   const countdownRef = useRef(null); // store countdown interval
-  
-  
+
   function pause() {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-  
+
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
       countdownRef.current = null;
     }
-  
+
     setIsPaused(true);
     setTimeStarted(false);
   }
@@ -66,15 +65,15 @@ function Dailyplanner() {
     setIsPaused(false);
     setTimeStarted(false);
     setHasStarted(false);
-    isInBreak.current = false // 🔁 reset break state
+    isInBreak.current = false; // 🔁 reset break state
   }
   const isInBreak = useRef(false); // store break state
-  
+
   function start() {
     if (timerRef.current || countdownRef.current) return; // Already running
     setTimeStarted(true);
     setHasStarted(true);
-  
+
     if (isInBreak.current) {
       let countdown = CountDown; // local variable to avoid stale closure
       countdownRef.current = setInterval(() => {
@@ -87,45 +86,40 @@ function Dailyplanner() {
           countdownRef.current = null;
           setCountDown(20); // reset for next break
           isInBreak.current = false; // exit break
-          start(); 
+          start();
         }
       }, 1000);
     } else {
       timerRef.current = setInterval(() => {
         setTime((prevTime) => {
           const newTime = prevTime + 1;
-          if(newTime >= maxTime){
+          if (newTime >= maxTime) {
             reset();
             return 0;
           }
           if (newTime % (60 * 20) === 0) {
             playSound();
-  
+
             clearInterval(timerRef.current);
             timerRef.current = null;
-  
+
             isInBreak.current = true;
             setCountDown(20);
             start();
           }
-  
+
           return newTime;
         });
       }, 1000);
     }
   }
-  
-  
 
-  
   useEffect(() => {
     return () => {
       clearInterval(timerRef.current);
       clearInterval(countdownRef.current);
     };
   }, []);
-  
-
 
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
@@ -147,6 +141,18 @@ function Dailyplanner() {
         >
           <div className="w-full flex gap-1 items-end justify-end">
             <Fullscreen />
+          </div>
+          <div className="mb-20 sm:mb-0 flex items-center flex-col">
+
+         
+          <div className="text-center mb-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-zinc-100">
+              👀 The 20-20-20 Rule for Your Eyes
+            </h2>
+            <p className="text-sm sm:text-base text-zinc-400 mt-1">
+              Every 20 minutes, take a 20-second break and look at something 20
+              feet away.
+            </p>
           </div>
 
           <div className="w-full mb-20 sm:w-[307px] flex flex-col ">
@@ -189,7 +195,7 @@ function Dailyplanner() {
                   />
                 )}
 
-                {TimeStarted && HasStarted &&(
+                {TimeStarted && HasStarted && (
                   <Button
                     onClick={() => {
                       pause();
@@ -217,7 +223,7 @@ function Dailyplanner() {
               </div>
             </div>
           </div>
-
+          </div>
           <div>
             <p className="text-zinc-700">Focus while caring for your eyes ❤</p>
           </div>
