@@ -17,7 +17,7 @@ function Dailyplanner() {
   const [IsPaused, setIsPaused] = useState(false);
   const [TimeStarted, setTimeStarted] = useState(false);
   const [HasStarted, setHasStarted] = useState(false);
-  const [isInBreak, setIsInBreak] = useState(false);
+  // const [isInBreak, setIsInBreak] = useState(false);
 
   function stopAlarmSound(){
     if(soundRef.current){
@@ -62,27 +62,29 @@ function Dailyplanner() {
     setIsPaused(false);
     setTimeStarted(false);
     setHasStarted(false);
-    setIsInBreak(false); // 🔁 reset break state
+    isInBreak.current = false // 🔁 reset break state
   }
+  const isInBreak = useRef(false); // store break state
   
   function start() {
-    if (timerRef.current || countdownRef.current) return; // already running
+    if (timerRef.current || countdownRef.current) return; // Already running
     setTimeStarted(true);
     setHasStarted(true);
   
-    if (isInBreak) {
-      let countdown = CountDown;
+    if (isInBreak.current) {
+      let countdown = CountDown; // local variable to avoid stale closure
       countdownRef.current = setInterval(() => {
-        countdown--;
-        setCountDown(countdown);
-  
-        if (countdown === 0) {
+        countdown -= 1;
+        setCountDown(countdown); // update state
+        console.log(countdown);
+        if (countdown <= 0) {
           playSound();
           clearInterval(countdownRef.current);
           countdownRef.current = null;
-          setCountDown(20);
-          setIsInBreak(false); // exit break
-          start(); // resume main timer
+          setCountDown(20); // reset for next break
+          isInBreak.current = false; // exit break
+          
+          start(); 
         }
       }, 1000);
     } else {
@@ -90,15 +92,15 @@ function Dailyplanner() {
         setTime((prevTime) => {
           const newTime = prevTime + 1;
   
-          if (newTime % (30) === 0) {
+          if (newTime % (20 * 60) === 0) {
             playSound();
   
             clearInterval(timerRef.current);
             timerRef.current = null;
   
-            setIsInBreak(true);
+            isInBreak.current = true;
             setCountDown(20);
-            start(); // start break
+            start();
           }
   
           return newTime;
@@ -106,6 +108,7 @@ function Dailyplanner() {
       }, 1000);
     }
   }
+  
   
 
   
