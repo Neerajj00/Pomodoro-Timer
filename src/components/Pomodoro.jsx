@@ -18,6 +18,7 @@ import SmallScreenSVG from './../svg/SmallScreenSVG';
 
 function Pomodoro() {
   const {
+    isWidthSmaller,
     isFullScreen, 
     sessionStartTime, setSessionStartTime,
     selectedSound,
@@ -247,7 +248,7 @@ function Pomodoro() {
                     handleBreakTimeChange("Short Break");
                     stopAlarmSound();
                   }}
-                  text={"Short Break"}
+                  text={`${isWidthSmaller ? "Short" : "Short Break"}`}
                   classes={breakTime === "Short Break" ? "bg-zinc-800" : ""}
                 />
                 <Button
@@ -255,7 +256,7 @@ function Pomodoro() {
                     handleBreakTimeChange("Long Break");
                     stopAlarmSound();
                   }}
-                  text={"Long Break"}
+                  text={`${isWidthSmaller ? "Long" : "Long Break"}`}
                   classes={breakTime === "Long Break" ? "bg-zinc-800" : ""}
                 />
               </div>

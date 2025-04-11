@@ -131,7 +131,7 @@ function Dailyplanner() {
   const seconds = time % 60;
 
   return (
-    <div className="flex flex-col h-[100vh] w-full">
+    <div className=" flex flex-col h-[100vh] w-full">
       {!isFullScreen && (
         <Navbar NavbarButton={NavbarButton} leftMostText={"20:20:20"} />
       )}
@@ -149,10 +149,10 @@ function Dailyplanner() {
             <Fullscreen />
           </div>
 
-          <div className="w-[307px] flex flex-col ">
+          <div className="w-full mb-20 sm:w-[307px] flex flex-col ">
             <div className="w-full flex flex-col items-center justify-center p-2">
               <div className="flex items-end py-10 ">
-                <div className=" text-5xl sm:text-8xl font-sans font-bold text-zinc-50 flex text-end gap-3  px-2">
+                <div className=" text-7xl sm:text-8xl font-sans font-bold text-zinc-50 flex text-end gap-3  px-2">
                   <p>{minutes < 10 ? `0${minutes}` : minutes}</p>
                   <p>:</p>
                   <p>{seconds < 10 ? `0${seconds}` : seconds}</p>

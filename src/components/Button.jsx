@@ -8,7 +8,7 @@ function Button({ onClick, text, isPlayButton, classes , svg }) {
       onClick={onClick}
       className={`${classes && classes} text-[14px] sm:text-[16px] text-zinc-500
   hover:bg-zinc-700 rounded-md 
-  px-3 py-2 sm:px-3 sm:py-2
+  px-4 py-3 mt-1 sm:px-3 sm:py-2
   cursor-pointer duration-100 transition-all`}
     >
       {isPlayButton ? isWidthSmaller ? svg : text : text}
