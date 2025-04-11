@@ -6,4 +6,8 @@ body{
     @apply text-zinc-500;
 }
 
-/* hello */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
