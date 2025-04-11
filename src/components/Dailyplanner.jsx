@@ -51,8 +51,12 @@ function Dailyplanner() {
     setIsPaused(true);
     setTimeStarted(false);
   }
-  
+  function handleWidth() {
+    const percentage = ((20 - CountDown) / 20) * 100;
+    return percentage;
+  }
   function reset() {
+    console.log("reset");
     clearInterval(timerRef.current);
     clearInterval(countdownRef.current);
     timerRef.current = null;
@@ -83,7 +87,6 @@ function Dailyplanner() {
           countdownRef.current = null;
           setCountDown(20); // reset for next break
           isInBreak.current = false; // exit break
-          
           start(); 
         }
       }, 1000);
@@ -91,8 +94,11 @@ function Dailyplanner() {
       timerRef.current = setInterval(() => {
         setTime((prevTime) => {
           const newTime = prevTime + 1;
-  
-          if (newTime % (20 * 60) === 0) {
+          if(newTime >= maxTime){
+            reset();
+            return 0;
+          }
+          if (newTime % (60 * 20) === 0) {
             playSound();
   
             clearInterval(timerRef.current);
@@ -155,6 +161,12 @@ function Dailyplanner() {
                 <p className="tabular-nums font-sans text-lg font-bold mb-1 text-red-600">
                   {CountDown}
                 </p>
+              </div>
+              <div className="rounded-xl mb-2 bg-zinc-800 w-4/5 sm:w-full h-1 overflow-hidden">
+                <div
+                  className="bg-red-600 h-full transition-all duration-500"
+                  style={{ width: `${handleWidth()}%` }}
+                />
               </div>
               <div className="mt-3 flex items-center gap-2">
                 {!TimeStarted && !IsPaused && (
