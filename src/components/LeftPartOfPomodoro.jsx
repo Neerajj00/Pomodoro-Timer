@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 
 function LeftPartOfPomodoro() {
   const { date, month } = useContext(GlobalContext);
-  const [task, setTask] = useState([
+  const [tasks, setTasks] = useState([
     {
       id: 1,
       title: "Task 1",
@@ -29,7 +29,8 @@ function LeftPartOfPomodoro() {
       classes={"h-[192px] sm:h-full lg:w-[398px] bg-amber-400 px-0"}
     >
       <div className="h-full w-full flex flex-col">
-        <header className="px-3 flex items-center justify-between">
+        {/* Header with buttons and date */}
+        <header className="px-3 mb-3 flex items-center justify-between">
           <div className="flex items-center text-center gap-2 ">
             <NavbarButton
               text={"Pending"}
@@ -61,24 +62,60 @@ function LeftPartOfPomodoro() {
           </div>
         </header>
 
-        <div className="w-full px-3 py-3 mt-2 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer">
-          <div className="flex items-center gap-3">
-            <div class="w-4 h-4 rounded-md border border-gray-600 hover:border-white transition duration-200" />
-            <h4 class="items-start gap-1.5 text-sm text-zinc-400 group-hover:text-zinc-300">
-              do a homework
-            </h4>
-          </div>
+        {/* show task using map function */}
+        <div className="flex flex-col">
+          {tasks.map((task) => (
+            <div 
+            key={task.id}
+            className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer">
+              <div className="flex items-center gap-3">
+                <div class="w-4 h-4 rounded-md border border-gray-600 hover:border-white transition duration-200" />
+                <h4 class="items-start gap-1.5 text-sm text-zinc-400 group-hover:text-zinc-300">
+                  {task.title}
+                </h4>
+              </div>
 
-          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <EditTaskSVG />
-            <DeleteTaskSVG />
-          </div>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <EditTaskSVG />
+                <DeleteTaskSVG />
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="w-full px-3 mt-2">
+        {/* Add new task button */}
+        {tasks.length > 0 && (
+          <div className="w-full px-3 mt-2">
             <button className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500  hover:text-zinc-200">
-            <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1">
                 <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center rounded-md"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+                <p className="text-zinc-500 text-[14px] transition-colors duration-100 group-hover:text-zinc-200">
+                  Add new task
+                </p>
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* No tasks message */}
+        {!tasks.length && (
+          <div className="flex items-center justify-center h-full w-full flex-col">
+            <div className="flex mb-1">
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -88,45 +125,22 @@ function LeftPartOfPomodoro() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center rounded-md"
-                >
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-                </svg>
-                <p className="text-zinc-500 text-[14px] transition-colors duration-100 group-hover:text-zinc-200">
-                Add new task
-                </p>
+                className="lucide lucide-square-check-big mb-3 flex h-[45px] w-[45px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md text-zinc-800"
+              >
+                <path d="m9 11 3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
             </div>
-            </button>
-        </div>
-
-        <div className="flex items-center justify-center h-full w-full flex-col">
-          <div className="flex mb-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-square-check-big mb-3 flex h-[45px] w-[45px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md text-zinc-800"
-            >
-              <path d="m9 11 3 3L22 4"></path>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-            </svg>
+            <div className="flex flex-col items-center ">
+              <p className="text-[14px] mb-1 text-zinc-600 ">
+                No tasks for this day
+              </p>
+              <p className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer">
+                Add a new task
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col items-center ">
-            <p className="text-[14px] mb-1 text-zinc-600 ">
-              No tasks for this day
-            </p>
-            <p className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer">
-              Add a new task
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </BoxContainer>
   );
