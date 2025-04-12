@@ -75,28 +75,30 @@ function LeftPartOfPomodoro() {
           </div>
         </div>
 
-        <button className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors group hover:border-zinc-500 hover:text-zinc-200">
-          <div className="flex items-center gap-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 cursor-pointer items-center justify-center rounded-md group-hover:border-zinc-400"
-            >
-              <path d="M5 12h14"></path>
-              <path d="M12 5v14"></path>
-            </svg>
-            <p className="text-zinc-500 text-[14px] group-hover:text-zinc-300">
-              Add new task
-            </p>
-          </div>
-        </button>
+        <div className="w-full px-3 mt-2">
+            <button className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500  hover:text-zinc-200">
+            <div className="flex items-center gap-1">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center rounded-md"
+                >
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+                </svg>
+                <p className="text-zinc-500 text-[14px] transition-colors duration-100 group-hover:text-zinc-200">
+                Add new task
+                </p>
+            </div>
+            </button>
+        </div>
 
         <div className="flex items-center justify-center h-full w-full flex-col">
           <div className="flex mb-1">
