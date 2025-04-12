@@ -1,8 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import NavbarButton from "./NavbarButton";
-import FolderIcon from "../svg/Foldericon";
-import GeneralSVG from "../svg/GeneralSVG";
-import FeedbackSVG from "./../svg/FeedbackSVG";
+import React, { useContext, useEffect } from "react";
 import FocusSVG from "./../svg/FocusSVG";
 import HamburgerSVG from "./../svg/HamburgerSVG";
 import { GlobalContext } from "../context/Context";
@@ -10,8 +6,6 @@ import { GlobalContext } from "../context/Context";
 function Navbar({
   NavbarButton,
   leftMostText,
-  firstButtonText,
-  secondButtonText,
 }) {
   const {
     handleMenuOverlay,
@@ -54,32 +48,10 @@ function Navbar({
               <p className="p-0.5">{leftMostText}</p>
               <p className="text-zinc-700 mr-2 ">/</p>
             </div>
-            {firstButtonText && (
-              <NavbarButton
-                text={firstButtonText}
-                Icon={FolderIcon}
-                isArrow={true}
-              />
-            )}
-            {secondButtonText && (
-              <NavbarButton
-                text={secondButtonText}
-                Icon={GeneralSVG}
-                isArrow={true}
-              />
-            )}
           </div>
         </div>
         <div className="flex h-full gap-2">
           <div className="flex h-full ">
-            <NavbarButton
-              text={"Feedback"}
-              Icon={FeedbackSVG}
-              isArrow={false}
-              classes={
-                "h-full px-1 hidden lg:flex items-center gap-1 cursor-pointer hover:bg-zinc-800 "
-              }
-            />
             <NavbarButton
               text={"Focus"}
               Icon={FocusSVG}

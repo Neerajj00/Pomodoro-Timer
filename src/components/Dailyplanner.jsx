@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
-import NavbarButton from "./NavbarButton";
 import Button from "./Button";
 import Fullscreen from "./../svg/Fullscreen";
 import BoxContainer from "./BoxContainer";
@@ -9,6 +8,7 @@ import PauseButtonSVG from "./../svg/PauseButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
 import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import SmallDailyPlannerAdjust from "./SmallDailyPlannerAdjust";
+import NavbarButton from './NavbarButton';
 
 function Dailyplanner() {
   const { isFullScreen, selectedSound } = useContext(GlobalContext);
