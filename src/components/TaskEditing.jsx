@@ -3,21 +3,33 @@ import NavbarButton from "./NavbarButton";
 import CalendarSVG from "../svg/CalendarSVG";
 import { GlobalContext } from "../context/Context";
 
-function TaskEditing({task , onCancel , onSave}) {
+function TaskEditing({task , isAddingNewTask ,taskLength , onCancel , onSave}) {
     const { date, month } = useContext(GlobalContext);
     const [title, setTitle] = useState(task?.title || "");
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    const handleSubmit = () => {
       if (title.trim()) {
         onSave(title); // pass updated title to parent
       }
     };
+    const handleAddSubmit = () => {
+      if (title.trim()) {
+        onSave({ id:taskLength+1, title, completed: false }); // pass new task to parent
+      }
+    };
 
+    const handleFormSubmit = (e) => {
+      e.preventDefault();
+      if (isAddingNewTask) {
+        handleAddSubmit();
+      } else {
+        handleSubmit();
+      }
+    };
   return (
     <div className="mx-3">
       <form
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       className="relative my-1 flex items-center justify-start">
         <input
           type="text"

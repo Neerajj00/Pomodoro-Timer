@@ -24,7 +24,6 @@ function LeftPartOfPomodoro() {
     },
   ]);
 
-  const [isEditing, setIsEditing] = useState(false);
   const [EditingTaskId, setEditingTaskId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -33,6 +32,10 @@ function LeftPartOfPomodoro() {
       prevTasks.map((t) => (t.id === taskId ? { ...t, title: newTitle } : t))
     );
     setEditingTaskId(null); // exit edit mode
+  }
+  function addNewTask(newTask) {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setIsAdding(false); // exit add mode
   }
 
   return (
@@ -141,7 +144,12 @@ function LeftPartOfPomodoro() {
           </div>
         )}
 
-        {isAdding && <TaskEditing />}
+        {isAdding && <TaskEditing 
+        onSave={(task) => addNewTask(task)}
+        onCancel={() => setIsAdding(false)}
+        isAddingNewTask={isAdding}
+        taskLength={tasks.length}
+        />}
 
         {/* No tasks message */}
         {!tasks.length && (
