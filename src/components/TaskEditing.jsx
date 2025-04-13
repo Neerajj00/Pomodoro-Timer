@@ -71,6 +71,7 @@ function TaskEditing({task , isAddingNewTask ,taskLength , onCancel , onSave}) {
             </button>
             <button
               type="button"
+              onClick={() => onCancel()}
               className="group flex items-center gap-1 rounded-md text-xs uppercase tracking-wide text-zinc-500 hover:text-zinc-300"
             >
               <span className="hidden rounded-md bg-zinc-800 px-2 py-0.5 group-hover:bg-zinc-700 md:inline">
