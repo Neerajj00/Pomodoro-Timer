@@ -5,7 +5,7 @@ import TaskEditing from './TaskEditing';
 
 function NonCompletedTask({tasks, handleTaskComplete, handleDeleteTask, setEditingTaskId, EditingTaskId, handleEditTask}) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-y-scroll">
           {tasks
             .filter((task) => task.completed === false) // show based on tab
             .map((task) => {
