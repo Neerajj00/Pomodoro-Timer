@@ -28,6 +28,13 @@ function LeftPartOfPomodoro() {
   const [EditingTaskId, setEditingTaskId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
 
+  function handleEditTask(taskId, newTitle) {
+    setTasks((prevTasks) =>
+      prevTasks.map((t) => (t.id === taskId ? { ...t, title: newTitle } : t))
+    );
+    setEditingTaskId(null); // exit edit mode
+  }
+
   return (
     <BoxContainer
       classes={"h-[192px] sm:h-full lg:w-[398px] bg-amber-400 px-0"}
@@ -69,7 +76,7 @@ function LeftPartOfPomodoro() {
         {/* show task using map function */}
         <div className="flex flex-col">
           {tasks.map((task) => {
-            return (Number(EditingTaskId) !== task.id) ? (
+            return Number(EditingTaskId) !== task.id ? (
               <div
                 key={task.id}
                 className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer"
@@ -82,16 +89,22 @@ function LeftPartOfPomodoro() {
                 </div>
 
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <EditTaskSVG onClick={() => {
-                    console.log("Editing task", task.id)
-                    setEditingTaskId(task.id);
-                  }} />
+                  <EditTaskSVG
+                    onClick={() => {
+                      console.log("Editing task", task.id);
+                      setEditingTaskId(task.id);
+                    }}
+                  />
                   <DeleteTaskSVG />
                 </div>
               </div>
             ) : (
               <div key={task.id}>
-                <TaskEditing task={task} />
+                <TaskEditing
+                  task={task}
+                  onSave={(newTitle) => handleEditTask(task.id, newTitle)}
+                  onCancel={() => setEditingTaskId(null)}
+                />
               </div>
             );
           })}

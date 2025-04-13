@@ -1,17 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NavbarButton from "./NavbarButton";
 import CalendarSVG from "../svg/CalendarSVG";
 import { GlobalContext } from "../context/Context";
 
-function TaskEditing({task}) {
+function TaskEditing({task , onCancel , onSave}) {
     const { date, month } = useContext(GlobalContext);
+    const [title, setTitle] = useState(task?.title || "");
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (title.trim()) {
+        onSave(title); // pass updated title to parent
+      }
+    };
+
   return (
     <div className="mx-3">
-      <form className="relative my-1 flex items-center justify-start">
+      <form
+      onSubmit={handleSubmit}
+      className="relative my-1 flex items-center justify-start">
         <input
+          type="text"
           className="flex-grow rounded-lg border border-zinc-700 bg-transparent px-3 py-2.5 pb-12 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none"
           placeholder="Type and press enter to save or esc to cancel"
-          value={task?.title || ""}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              onCancel(); // callback to exit edit mode
+            }
+          }}          
         />
         <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
