@@ -5,9 +5,9 @@ import PendingSVG from "../svg/PendingSVG";
 import CompletedSVG from "../svg/CompletedSVG";
 import CalendarSVG from "../svg/CalendarSVG";
 import { GlobalContext } from "../context/Context";
-import EditTaskSVG from "./../svg/EditTaskSVG";
-import DeleteTaskSVG from "./../svg/DeleteTaskSVG";
 import TaskEditing from "./TaskEditing";
+import CompletedTask from "./CompletedTask";
+import NonCompletedTask from "./NonCompletedTask";
 
 function LeftPartOfPomodoro() {
   const { date, month } = useContext(GlobalContext);
@@ -26,6 +26,7 @@ function LeftPartOfPomodoro() {
 
   const [EditingTaskId, setEditingTaskId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [ButtonText, setButtonText] = useState("Pending");
 
   function handleEditTask(taskId, newTitle) {
     setTasks((prevTasks) =>
@@ -36,6 +37,16 @@ function LeftPartOfPomodoro() {
   function addNewTask(newTask) {
     setTasks((prevTasks) => [...prevTasks, newTask]);
     setIsAdding(false); // exit add mode
+  }
+  function handleDeleteTask(taskId) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  }
+  function handleTaskComplete(taskid) {
+    setTasks((prevTasks) =>
+      prevTasks.map((t) =>
+        t.id === taskid ? { ...t, completed: !t.completed } : t
+      )
+    );
   }
 
   return (
@@ -51,9 +62,11 @@ function LeftPartOfPomodoro() {
               Icon={PendingSVG}
               isArrow={false}
               classes={
-                "h-full px-2 p-0.5 gap-1 text-[12px]  bg-zinc-800 rounded-md "
+                "h-full px-2 p-0.5 gap-1 text-[12px]  rounded-md "
               }
-            />
+              onClick={()=>setButtonText("Pending")}
+              ButtonText={ButtonText}
+              />
             <NavbarButton
               text={"Completed"}
               Icon={CompletedSVG}
@@ -61,6 +74,8 @@ function LeftPartOfPomodoro() {
               classes={
                 "h-full p-0.5 px-1 gap-1 cursor-pointer hover:bg-zinc-800 rounded-md text-[12px] "
               }
+              onClick={()=>setButtonText("Completed")}
+              ButtonText={ButtonText}
             />
           </div>
 
@@ -77,44 +92,28 @@ function LeftPartOfPomodoro() {
         </header>
 
         {/* show task using map function */}
-        <div className="flex flex-col">
-          {tasks.map((task) => {
-            return Number(EditingTaskId) !== task.id ? (
-              <div
-                key={task.id}
-                className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 rounded-md border border-gray-600 hover:border-white transition duration-200" />
-                  <h4 className="items-start gap-1.5 text-sm text-zinc-400 group-hover:text-zinc-300">
-                    {task.title}
-                  </h4>
-                </div>
-
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <EditTaskSVG
-                    onClick={() => {
-                      console.log("Editing task", task.id);
-                      setEditingTaskId(task.id);
-                    }}
-                  />
-                  <DeleteTaskSVG />
-                </div>
-              </div>
-            ) : (
-              <div key={task.id}>
-                <TaskEditing
-                  task={task}
-                  onSave={(newTitle) => handleEditTask(task.id, newTitle)}
-                  onCancel={() => setEditingTaskId(null)}
-                />
-              </div>
-            );
-          })}
-        </div>
+        {ButtonText == "Pending" ? (
+          <NonCompletedTask
+            tasks={tasks}
+            handleTaskComplete={handleTaskComplete}
+            handleDeleteTask={handleDeleteTask}
+            setEditingTaskId={setEditingTaskId}
+            EditingTaskId={EditingTaskId}
+            handleEditTask={handleEditTask}
+          />
+        ) : (
+          <CompletedTask
+            tasks={tasks}
+            handleTaskComplete={handleTaskComplete}
+            handleDeleteTask={handleDeleteTask}
+            setEditingTaskId={setEditingTaskId}
+            EditingTaskId={EditingTaskId}
+            handleEditTask={handleEditTask}
+          />
+        )}
 
         {/* Add new task button */}
-        {tasks.length > 0 && !isAdding && (
+        {(ButtonText === "Pending") && tasks.length > 0 && !isAdding && (
           <div className="w-full px-3 mt-2">
             <button
               onClick={() => setIsAdding(true)}
@@ -144,12 +143,14 @@ function LeftPartOfPomodoro() {
           </div>
         )}
 
-        {isAdding && <TaskEditing 
-        onSave={(task) => addNewTask(task)}
-        onCancel={() => setIsAdding(false)}
-        isAddingNewTask={isAdding}
-        taskLength={tasks.length}
-        />}
+        {isAdding && (
+          <TaskEditing
+            onSave={(task) => addNewTask(task)}
+            onCancel={() => setIsAdding(false)}
+            isAddingNewTask={isAdding}
+            taskLength={tasks.length}
+          />
+        )}
 
         {/* No tasks message */}
         {!tasks.length && (
@@ -173,14 +174,15 @@ function LeftPartOfPomodoro() {
             </div>
             <div className="flex flex-col items-center ">
               <p className="text-[14px] mb-1 text-zinc-600 ">
-                No tasks for this day
+                {(ButtonText === "Pending") ? "No tasks for this day" : "No completed tasks for this day"}
               </p>
-              <p className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer">
+              {(ButtonText === "Pending") && <p className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer">
                 Add a new task
-              </p>
+              </p>}
             </div>
           </div>
         )}
+
       </div>
     </BoxContainer>
   );

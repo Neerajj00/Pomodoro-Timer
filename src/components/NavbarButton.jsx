@@ -1,14 +1,15 @@
 import React from "react";
 import DownArrow from "./../svg/DownArrow";
 
-function NavbarButton({ text, Icon, isArrow, classes }) {
+function NavbarButton({onClick, ButtonText, text, Icon, isArrow, classes }) {
   return (
     <div
+    onClick={onClick}
       className={
         (classes
           ? classes
           : " gap-2 px-[5px] rounded-md hover:bg-zinc-700 hover:text-zinc-400 ") +
-        "cursor-pointer duration-100 transition-all flex items-center"
+        `cursor-pointer duration-100 transition-all flex items-center ${ButtonText == text ? " bg-zinc-800" : "" }`
       }
     >
       <div className="flex items-center">
