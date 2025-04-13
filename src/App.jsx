@@ -1,3 +1,4 @@
+// App.jsx
 import React, { useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
@@ -12,9 +13,9 @@ function App() {
     <>
     {displayMenuOverlay && <MenuOverlay/>}
     {displayAdjustManuallyOverlay && <AdjustManuallyOverlay />}
-    <div className='flex flex-row h-[100vh] z-10'>
+    <div className='flex flex-row h-full min-h-[100vh] sm:h-[100vh] z-10'>
       {!isFullScreen && <Sidebar/>}
-      <main className='main-content bg-black w-full h-[100vh]'>
+      <main className='main-content bg-black w-full h-full sm:h-[100vh]'>
         <Outlet />
       </main>
     </div>
@@ -22,4 +23,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

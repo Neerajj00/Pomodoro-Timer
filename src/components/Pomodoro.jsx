@@ -1,3 +1,5 @@
+
+// Pomodoro.jsx
 import React, { useContext, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
@@ -28,9 +30,9 @@ function Pomodoro() {
     setBreakTime,
   } = useContext(GlobalContext);
 
-  const [TimeStarted, setTimeStarted] = useState(false); // true = running
-  const [HasStarted, setHasStarted] = useState(false); // true = if started once
-  const [IsPaused, setIsPaused] = useState(false); // true = if paused
+  const [TimeStarted, setTimeStarted] = useState(false);
+  const [HasStarted, setHasStarted] = useState(false);
+  const [IsPaused, setIsPaused] = useState(false);
 
   const intervalRef = useRef(null);
   const alarmSoundRef = useRef(null);
@@ -43,13 +45,13 @@ function Pomodoro() {
   
     setBreakTime(buttonText);
     setTime(breakTimeOb[buttonText].time);
-    setSessionStartTime(breakTimeOb[buttonText].time); // 🔥 New Line
+    setSessionStartTime(breakTimeOb[buttonText].time);
   }
   
   function handleTimeUpdate(time) {
     const updateTime = parseInt(time) * 60;
     setTime((prev) => prev + updateTime);
-    setSessionStartTime((prev) => prev + updateTime); // 🔥 New Line
+    setSessionStartTime((prev) => prev + updateTime);
   }
   
   function stopAlarmSound() {
@@ -60,29 +62,26 @@ function Pomodoro() {
       alarmSoundRef.current = null;
     }
   }
-  
-  // Calculate progress width
-  
+
   function handleWidth() {
     const percentage = ((sessionStartTime - Time) / sessionStartTime) * 100;
     return percentage;
   }
-  
-  // Start the timer
+
   function start() {
     setTimeStarted(true);
     setHasStarted(true);
     setIsPaused(false);
-  
+
     intervalRef.current = setInterval(() => {
       setTime((prev) => {
         if (prev > 0) return prev - 1;
         else {
           clearInterval(intervalRef.current);
-  
+
           let playCount = 0;
           const maxPlays = 3;
-  
+
           const playAlarm = () => {
             if (!alarmSoundRef.current) {
               alarmSoundRef.current = new Audio(`/audio/${selectedSound}`);
@@ -90,46 +89,41 @@ function Pomodoro() {
             alarmSoundRef.current.currentTime = 0;
             alarmSoundRef.current.play();
             playCount++;
-  
+
             if (playCount < maxPlays) {
               alarmSoundRef.current.onended = playAlarm;
             } else {
               alarmSoundRef.current.onended = () => {
-                // After 3rd play finishes
                 alarmSoundRef.current = null;
-        
-                // Reset timer flags back to idle state
-                reset(); // ✅ because session is completed
+                reset();
               };
             }
           };
-  
+
           playAlarm();
           return 0;
         }
       });
     }, 1000);
   }
-  
-  // Pause the timer
+
   function pause() {
     setTimeStarted(false);
-    setIsPaused(true); // now paused
+    setIsPaused(true);
     clearInterval(intervalRef.current);
   }
 
-  // Reset the timer
   function reset() {
     clearInterval(intervalRef.current);
     setTimeStarted(false);
     setHasStarted(false);
-    setIsPaused(false); // reset everything
+    setIsPaused(false);
     setTime(breakTimeOb[breakTime].time);
-    setSessionStartTime(breakTimeOb[breakTime].time); // 🔥 New Line
+    setSessionStartTime(breakTimeOb[breakTime].time);
   }
 
   return (
-    <div className="flex flex-col h-[100vh] w-full">
+    <div className="flex flex-col min-h-full sm:h-[100vh] w-full">
       {!isFullScreen && <Navbar
         NavbarButton={NavbarButton}
         leftMostText={"Pomodoro"}
@@ -137,15 +131,12 @@ function Pomodoro() {
         secondButtonText={"General"}
       />}
 
-      {/* main content */}
       <div className="h-full flex flex-1 flex-grow flex-col-reverse lg:flex-row gap-3 p-3 ">
-        {/* leftpart */}
         {!isFullScreen && <LeftPartOfPomodoro/>}
 
-        {/* rightpart */}
         <BoxContainer
           classes={
-            "h-full flex p-4 items-center flex-col justify-between w-full flex-1 border border-zinc-800"
+            "h-[500px] sm:h-full flex p-4 items-center flex-col justify-between w-full flex-1 border border-zinc-800"
           }
         >
           <div className="w-full flex gap-1 items-end justify-end">
