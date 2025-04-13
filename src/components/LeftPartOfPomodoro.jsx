@@ -7,7 +7,7 @@ import CalendarSVG from "../svg/CalendarSVG";
 import { GlobalContext } from "../context/Context";
 import EditTaskSVG from "./../svg/EditTaskSVG";
 import DeleteTaskSVG from "./../svg/DeleteTaskSVG";
-import { Plus } from "lucide-react";
+import TaskEditing from "./TaskEditing";
 
 function LeftPartOfPomodoro() {
   const { date, month } = useContext(GlobalContext);
@@ -23,6 +23,10 @@ function LeftPartOfPomodoro() {
       completed: false,
     },
   ]);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [EditingTaskId, setEditingTaskId] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   return (
     <BoxContainer
@@ -64,29 +68,42 @@ function LeftPartOfPomodoro() {
 
         {/* show task using map function */}
         <div className="flex flex-col">
-          {tasks.map((task) => (
-            <div 
-            key={task.id}
-            className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer">
-              <div className="flex items-center gap-3">
-                <div class="w-4 h-4 rounded-md border border-gray-600 hover:border-white transition duration-200" />
-                <h4 class="items-start gap-1.5 text-sm text-zinc-400 group-hover:text-zinc-300">
-                  {task.title}
-                </h4>
-              </div>
+          {tasks.map((task) => {
+            return (Number(EditingTaskId) !== task.id) ? (
+              <div
+                key={task.id}
+                className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-md border border-gray-600 hover:border-white transition duration-200" />
+                  <h4 className="items-start gap-1.5 text-sm text-zinc-400 group-hover:text-zinc-300">
+                    {task.title}
+                  </h4>
+                </div>
 
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <EditTaskSVG />
-                <DeleteTaskSVG />
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <EditTaskSVG onClick={() => {
+                    console.log("Editing task", task.id)
+                    setEditingTaskId(task.id);
+                  }} />
+                  <DeleteTaskSVG />
+                </div>
               </div>
-            </div>
-          ))}
+            ) : (
+              <div key={task.id}>
+                <TaskEditing task={task} />
+              </div>
+            );
+          })}
         </div>
 
         {/* Add new task button */}
-        {tasks.length > 0 && (
+        {tasks.length > 0 && !isAdding && (
           <div className="w-full px-3 mt-2">
-            <button className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500  hover:text-zinc-200">
+            <button
+              onClick={() => setIsAdding(true)}
+              className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500  hover:text-zinc-200"
+            >
               <div className="flex items-center gap-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +127,8 @@ function LeftPartOfPomodoro() {
             </button>
           </div>
         )}
+
+        {isAdding && <TaskEditing />}
 
         {/* No tasks message */}
         {!tasks.length && (
