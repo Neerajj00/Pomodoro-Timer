@@ -25,9 +25,9 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
           <div className="flex items-center justify-center gap-2 w-full">
             <p>Enter timer Duration Below</p>
           </div>
-          <div class="flex text-4xl text-white sm:text-7xl my-4 flex-row items-center justify-center gap-0 sm:my-8 sm:gap-4">
-            <div class="flex max-w-[80px] flex-col items-center sm:max-w-[100px]">
-              <div class="relative">
+          <div className="flex text-4xl text-white sm:text-7xl my-4 flex-row items-center justify-center gap-0 sm:my-8 sm:gap-4">
+            <div className="flex max-w-[80px] flex-col items-center sm:max-w-[100px]">
+              <div className="relative">
               <input
                   type="text"
                   inputMode="numeric"
@@ -48,14 +48,14 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
                     }
                   }}
                 />
-                <span class="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
+                <span className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
                   hour
                 </span>
               </div>
             </div>
-            <div class="relative -top-4 sm:-top-6">:</div>
-            <div class="flex max-w-[100px] flex-col items-center sm:max-w-[100px]">
-              <div class="relative">
+            <div className="relative -top-4 sm:-top-6">:</div>
+            <div className="flex max-w-[100px] flex-col items-center sm:max-w-[100px]">
+              <div className="relative">
               <input
                   type="text"
                   inputMode="numeric"
@@ -76,14 +76,14 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
                     }
                   }}
                 />
-                <span class="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
+                <span className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
                   min
                 </span>
               </div>
             </div>
-            <div class="relative -top-4 sm:-top-6">:</div>
-            <div class="flex max-w-[80px] flex-col items-center sm:max-w-[100px]">
-              <div class="relative">
+            <div className="relative -top-4 sm:-top-6">:</div>
+            <div className="flex max-w-[80px] flex-col items-center sm:max-w-[100px]">
+              <div className="relative">
                 <input
                   type="text"
                   inputMode="numeric"
@@ -104,7 +104,7 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
                     }
                   }}
                 />
-                <span class="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
+                <span className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 text-base text-zinc-500 sm:text-2xl">
                   sec
                 </span>
               </div>

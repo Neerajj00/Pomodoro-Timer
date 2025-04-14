@@ -37,7 +37,6 @@ function RightPartOfPomodoro() {
   const alarmSoundRef = useRef(null);
 
   useEffect(() => {
-    console.log("isInitialState:", isInitialState);
     if (!isInitialState && location.pathname === '/timer') {
       start();
     }

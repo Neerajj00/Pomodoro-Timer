@@ -34,7 +34,6 @@ function Timer() {
       (parseInt(minute) || 0) * 60 +
       (parseInt(second) || 0);
   
-    console.log("Timer set:", totalSeconds);
   
     if (totalSeconds > 0) {
       setTime(totalSeconds);
@@ -52,7 +51,6 @@ useEffect(() => {
 
   useEffect(()=>{
     setTimerFromTemp();
-    console.log("hour:", hour, "minute:", minute, "second:", second);
   },[hour, minute, second , isInitialState]);
 
   return (
