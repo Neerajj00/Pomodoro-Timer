@@ -15,12 +15,13 @@ function App() {
     <>
     {displayMenuOverlay && <MenuOverlay/>}
     {displayAdjustManuallyOverlay && <AdjustManuallyOverlay />}
-    <div className='flex flex-row h-full min-h-[100vh] sm:h-[100vh] z-10'>
+    <div className='outer-container flex flex-row h-full lg:h-[100vh] z-10'>
       {!isFullScreen && <Sidebar/>}
-      <main className='main-content bg-black w-full h-full sm:h-[100vh]'>
+      <main className='main-content bg-black w-full h-full lg:h-[100vh]'>
         <Outlet />
       </main>
     </div>
+
     <ToastContainer 
         position="top-center" // Slide from top
         autoClose={3000} // 3 seconds

@@ -123,7 +123,7 @@ function Pomodoro() {
   }
 
   return (
-    <div className="flex flex-col min-h-full sm:h-[100vh] w-full">
+    <div className="flex pomodoro flex-col lg:h-[100vh] w-full">
       {!isFullScreen && <Navbar
         NavbarButton={NavbarButton}
         leftMostText={"Pomodoro"}

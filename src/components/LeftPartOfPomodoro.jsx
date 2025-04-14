@@ -64,7 +64,7 @@ function LeftPartOfPomodoro() {
   }, [tasks]);
 
   return (
-    <BoxContainer classes={"h-full lg:w-[398px] bg-amber-400 px-0 "}>
+    <BoxContainer classes={"left-part-pomo h-full lg:w-[398px] bg-amber-400 px-0 "}>
       <div className="h-full w-full flex flex-col ">
         {/* Header with buttons and date */}
         <header className="px-3 mb-3 flex items-center justify-between">
