@@ -38,13 +38,12 @@ function RightPartOfPomodoro() {
 
   useEffect(() => {
     console.log("isInitialState:", isInitialState);
-    if (!isInitialState && location.pathname !== '/') {
+    if (!isInitialState && location.pathname === '/timer') {
       start();
     }
   }, [isInitialState]);
 
   useEffect(() => {
-    console.log(location.pathname)
     return () => {
       clearInterval(intervalRef.current);
       setTimeStarted(false);
@@ -52,7 +51,6 @@ function RightPartOfPomodoro() {
       setIsPaused(false);
       setIsInitialState(true);
       stopAlarmSound();
-      console.log("Unmounted and cleaned RightPartOfPomodoro");
     };
   }, []);
   
