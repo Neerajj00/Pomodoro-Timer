@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BoxContainer from "./BoxContainer";
 import FullscreenSVG from "../svg/FullscreenSVG";
 import Button from "./Button";
@@ -7,12 +7,8 @@ import { GlobalContext } from "../context/Context";
 import SettingButtonInTimer from "./SettingButtonInTimer";
 import PlayButtonSVG from "./../svg/PlayButtonSVG";
 
-function TimerInitialState() {
+function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute, second, setSecond}) {
   const { isFullScreen, setTimerOverlay } = useContext(GlobalContext);
-
-  const [hour, setHour] = useState("");
-  const [minute, setMinute] = useState("");
-  const [second, setSecond] = useState("");
 
   return (
     <BoxContainer
@@ -32,16 +28,23 @@ function TimerInitialState() {
           <div class="flex text-4xl text-white sm:text-7xl my-4 flex-row items-center justify-center gap-0 sm:my-8 sm:gap-4">
             <div class="flex max-w-[80px] flex-col items-center sm:max-w-[100px]">
               <div class="relative">
-                <input
+              <input
                   type="text"
-                  className="border-none bg-transparent text-center placeholder-white outline-none  w-full pb-7 font-bold sm:pb-9"
-                  value={hour !== "" ? hour.padStart(2,'0') : ""}
+                  inputMode="numeric"
+                  pattern="\d*"
+                  className="border-none bg-transparent text-center placeholder-white outline-none w-full pb-7 font-bold sm:pb-9"
+                  value={hour}
                   placeholder="00"
                   maxLength={2}
                   onChange={(e) => {
                     const val = e.target.value;
                     if (/^\d{0,2}$/.test(val)) {
                       setHour(val);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (hour.length === 1) {
+                      setHour(hour.padStart(2, "0"));
                     }
                   }}
                 />
@@ -53,16 +56,23 @@ function TimerInitialState() {
             <div class="relative -top-4 sm:-top-6">:</div>
             <div class="flex max-w-[100px] flex-col items-center sm:max-w-[100px]">
               <div class="relative">
-                <input
+              <input
                   type="text"
-                  className="border-none bg-transparent text-center placeholder-white  w-full pb-7 font-bold sm:pb-9"
-                  value={minute !== "" ? minute.padStart(2,'0') : ""}
+                  inputMode="numeric"
+                  pattern="\d*"
+                  className="border-none bg-transparent text-center placeholder-white outline-none w-full pb-7 font-bold sm:pb-9"
+                  value={minute}
                   placeholder="00"
                   maxLength={2}
                   onChange={(e) => {
                     const val = e.target.value;
                     if (/^\d{0,2}$/.test(val)) {
                       setMinute(val);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (minute.length === 1) {
+                      setMinute(minute.padStart(2, "0"));
                     }
                   }}
                 />
@@ -76,14 +86,21 @@ function TimerInitialState() {
               <div class="relative">
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="\d*"
                   className="border-none bg-transparent text-center placeholder-white outline-none w-full pb-7 font-bold sm:pb-9"
-                  value={second !== "" ? second.padStart(2,'0') : ""}
+                  value={second}
                   placeholder="00"
                   maxLength={2}
                   onChange={(e) => {
                     const val = e.target.value;
                     if (/^\d{0,2}$/.test(val)) {
                       setSecond(val);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (second.length === 1) {
+                      setSecond(second.padStart(2, "0"));
                     }
                   }}
                 />
@@ -100,6 +117,7 @@ function TimerInitialState() {
               classes={"bg-zinc-800"}
               isPlayButton={true}
               svg={<PlayButtonSVG />}
+              onClick={() => setIsInitialState(false)}
             />
           </div>
         </div>

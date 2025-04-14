@@ -19,7 +19,7 @@ function TimerSettingOverlay() {
 
   return (
     <div className="w-full rounded-lg fixed inset-0 flex items-center justify-center bg-zinc-800/90 z-50 ">
-      <div className="  w-[450px] shadow rounded-lg border border-zinc-800 bg-zinc-900 p-4 text-sm text-zinc-400">
+      <div className="w-[300px]  sm:w-[450px] shadow rounded-lg border border-zinc-800 bg-zinc-900 p-4 text-sm text-zinc-400">
         <div className="flex justify-between items-center mb-3">
           <p>Play a chime sound during the timer</p>
           {/* Cross Button */}

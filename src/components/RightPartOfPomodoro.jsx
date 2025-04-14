@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import AdjustManually from "../svg/AdjustManually";
 import FullscreenSVG from "../svg/FullscreenSVG";
@@ -10,7 +10,7 @@ import PlayButtonSVG from "../svg/PlayButtonSVG";
 import ResetButtonSVG from "../svg/ResetButtonSVG";
 import SmallScreenSVG from '../svg/SmallScreenSVG';
 
-function RightPartOfPomodoro() {
+function RightPartOfPomodoro({isInitialState}) {
   const {
     isWidthSmaller,
     isFullScreen, 
@@ -29,6 +29,12 @@ function RightPartOfPomodoro() {
 
   const intervalRef = useRef(null);
   const alarmSoundRef = useRef(null);
+
+  useEffect(() => {
+    if (!isInitialState) {
+      start();
+    }
+  }, [isInitialState]);
 
   function handleBreakTimeChange(buttonText) {
     clearInterval(intervalRef.current);
