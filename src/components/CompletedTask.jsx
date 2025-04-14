@@ -2,12 +2,14 @@ import React from 'react'
 import DeleteTaskSVG from '../svg/DeleteTaskSVG';
 import TaskEditing from './TaskEditing';
 import { toast } from 'react-toastify';
+import { nanoid } from 'nanoid';
+
 
 function CompletedTask({incompleteCount,tasks, handleTaskComplete, handleDeleteTask, setEditingTaskId, EditingTaskId, handleEditTask}) {
 
   const handleClickCheckbox = (taskId) => {
     if (incompleteCount >= 7) {
-      toast.error("First delete some inComplete task in your Pending tab", {
+      toast.error("First delete some Pending task in your Pending tab", {
         position: "top-center",
       });
     } else {
@@ -22,7 +24,7 @@ function CompletedTask({incompleteCount,tasks, handleTaskComplete, handleDeleteT
             .map((task) => {
               return Number(EditingTaskId) !== task.id ? (
                 <div
-                key={EditingTaskId === task.id ? `editing-${task.id}` : `task-${task.id}`}
+                key={task.id}
                   className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
@@ -51,7 +53,7 @@ function CompletedTask({incompleteCount,tasks, handleTaskComplete, handleDeleteT
                   </div>
                 </div>
               ) : (
-                <div key={EditingTaskId === task.id ? `editing-${task.id}` : `task-${task.id}`}>
+                <div key={task.id}>
                   <TaskEditing
                     task={task}
                     onSave={(newTitle) => handleEditTask(task.id, newTitle)}

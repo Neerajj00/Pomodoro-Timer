@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import NavbarButton from "./NavbarButton";
 import CalendarSVG from "../svg/CalendarSVG";
 import { GlobalContext } from "../context/Context";
+import { nanoid } from "nanoid";
 
 function TaskEditing({task , isAddingNewTask ,taskLength , onCancel , onSave}) {
     const { date, month } = useContext(GlobalContext);
@@ -14,7 +15,7 @@ function TaskEditing({task , isAddingNewTask ,taskLength , onCancel , onSave}) {
     };
     const handleAddSubmit = () => {
       if (title.trim()) {
-        onSave({ id:taskLength+1, title, completed: false }); // pass new task to parent
+        onSave({ id:nanoid(), title, completed: false }); // pass new task to parent
       }
     };
 
