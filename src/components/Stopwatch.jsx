@@ -2,8 +2,6 @@ import React from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
 import Button from "./Button";
-import AdjustManually from "./../svg/AdjustManually";
-import Fullscreen from "./../svg/Fullscreen";
 import BoxContainer from "./BoxContainer";
 
 function Stopwatch() {

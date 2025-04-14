@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../context/Context";
 
-function Fullscreen() {
+function FullscreenSVG() {
   const { setisFullScreen } = useContext(GlobalContext);
   return (
     <svg
@@ -27,4 +27,4 @@ function Fullscreen() {
   );
 }
 
-export default Fullscreen;
+export default FullscreenSVG;

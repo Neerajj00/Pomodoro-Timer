@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Button from "./Button";
-import Fullscreen from "./../svg/Fullscreen";
+import FullscreenSVG from "./../svg/FullscreenSVG";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
 import PauseButtonSVG from "./../svg/PauseButtonSVG";
@@ -174,7 +174,7 @@ function Dailyplanner() {
               </svg>
             </div>
 
-            <Fullscreen />
+            <FullscreenSVG />
           </div>
           <div className="mb-20 sm:mb-0 flex items-center flex-col">
             <div className="text-center mb-4">

@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import Button from "./Button";
 import AdjustManually from "../svg/AdjustManually";
-import Fullscreen from "../svg/Fullscreen";
+import FullscreenSVG from "../svg/FullscreenSVG";
 import TimingButton from "./TimingButton";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
@@ -124,7 +124,7 @@ function RightPartOfPomodoro() {
         >
           <div className="w-full flex gap-1 items-end justify-end">
             <AdjustManually />
-            {!isFullScreen ? <Fullscreen /> : <SmallScreenSVG/>}
+            {!isFullScreen ? <FullscreenSVG /> : <SmallScreenSVG/>}
           </div>
 
           <div className="w-[307px] flex flex-col ">
