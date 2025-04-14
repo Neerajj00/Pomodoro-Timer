@@ -5,6 +5,8 @@ import Sidebar from './components/Sidebar'
 import MenuOverlay from './components/MenuOverlay';
 import { GlobalContext } from './context/Context';
 import AdjustManuallyOverlay from './components/AdjustManuallyOverlay';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const {isFullScreen, displayMenuOverlay ,displayAdjustManuallyOverlay } = useContext(GlobalContext);
@@ -19,6 +21,14 @@ function App() {
         <Outlet />
       </main>
     </div>
+    <ToastContainer 
+        position="top-center" // Slide from top
+        autoClose={3000} // 3 seconds
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+      />
     </>
   )
 }

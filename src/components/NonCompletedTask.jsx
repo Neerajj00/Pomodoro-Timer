@@ -2,8 +2,21 @@ import React from 'react'
 import EditTaskSVG from '../svg/EditTaskSVG';
 import DeleteTaskSVG from '../svg/DeleteTaskSVG';
 import TaskEditing from './TaskEditing';
+import { toast } from 'react-toastify';
 
-function NonCompletedTask({tasks, handleTaskComplete, handleDeleteTask, setEditingTaskId, EditingTaskId, handleEditTask}) {
+
+function NonCompletedTask({completedCount,tasks, handleTaskComplete, handleDeleteTask, setEditingTaskId, EditingTaskId, handleEditTask}) {
+
+  const handleClickCheckbox = (taskId) => {
+    if (completedCount >= 7) {
+      toast.error("First delete some completed task history in your completed tab", {
+        position: "top-center",
+      });
+    } else {
+      handleTaskComplete(taskId); // normal behavior
+    }
+  };
+
   return (
     <div className="flex flex-col ">
           {tasks
@@ -11,12 +24,12 @@ function NonCompletedTask({tasks, handleTaskComplete, handleDeleteTask, setEditi
             .map((task) => {
               return Number(EditingTaskId) !== task.id ? (
                 <div
-                  key={task.id}
+                key={EditingTaskId === task.id ? `editing-${task.id}` : `task-${task.id}`}
                   className="w-full px-3 py-3 hover:bg-zinc-800 flex items-center justify-between group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      onClick={() => handleTaskComplete(task.id)}
+                      onClick={() => handleClickCheckbox(task.id)}
                       className={`w-4 h-4 rounded-md transition duration-200 cursor-pointer border 
               ${
                 task.completed
@@ -43,7 +56,7 @@ function NonCompletedTask({tasks, handleTaskComplete, handleDeleteTask, setEditi
                   </div>
                 </div>
               ) : (
-                <div key={task.id}>
+                <div key={EditingTaskId === task.id ? `editing-${task.id}` : `task-${task.id}`}>
                   <TaskEditing
                     task={task}
                     onSave={(newTitle) => handleEditTask(task.id, newTitle)}

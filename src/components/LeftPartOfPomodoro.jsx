@@ -21,6 +21,9 @@ function LeftPartOfPomodoro() {
   const [EditingTaskId, setEditingTaskId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [ButtonText, setButtonText] = useState("Pending");
+  const [maxLength, setMaxLength] = useState(7);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [incompleteCount, setIncompleteCount] = useState(0);
 
   function handleEditTask(taskId, newTitle) {
     setTasks((prevTasks) =>
@@ -47,6 +50,15 @@ function LeftPartOfPomodoro() {
     );
   }
 
+
+  useEffect(() => {
+    const completed = tasks.filter(task => task.completed).length;
+    const incomplete = tasks.filter(task => !task.completed).length;
+
+    setCompletedCount(completed);
+    setIncompleteCount(incomplete);
+  }, [tasks]); // <- this runs every time tasks change
+
   useEffect(() => {
     const tasksString = JSON.stringify(tasks);
     localStorage.setItem("tasks", tasksString);
@@ -70,7 +82,9 @@ function LeftPartOfPomodoro() {
               text={"Completed"}
               Icon={CompletedSVG}
               isArrow={false}
-              classes={"h-full p-0.5 px-1 gap-1 cursor-pointer hover:bg-zinc-800 rounded-md text-[12px] "}
+              classes={
+                "h-full p-0.5 px-1 gap-1 cursor-pointer hover:bg-zinc-800 rounded-md text-[12px] "
+              }
               onClick={() => setButtonText("Completed")}
               ButtonText={ButtonText}
             />
@@ -81,7 +95,9 @@ function LeftPartOfPomodoro() {
               text={`${date} ${month}`}
               Icon={CalendarSVG}
               isArrow={false}
-              classes={" flex my-1 px-1 py-1 items-center text-xs gap-1 justify-between hover:bg-zinc-700 hover:text-zinc-300 bg-zinc-800 rounded-md cursor-pointer "}
+              classes={
+                " flex my-1 px-1 py-1 items-center text-xs gap-1 justify-between hover:bg-zinc-700 hover:text-zinc-300 bg-zinc-800 rounded-md cursor-pointer "
+              }
             />
           </div>
         </header>
@@ -89,6 +105,7 @@ function LeftPartOfPomodoro() {
         {/* show task using map function */}
         {ButtonText === "Pending" ? (
           <NonCompletedTask
+            completedCount={completedCount}
             tasks={tasks}
             handleTaskComplete={handleTaskComplete}
             handleDeleteTask={handleDeleteTask}
@@ -98,6 +115,7 @@ function LeftPartOfPomodoro() {
           />
         ) : (
           <CompletedTask
+          incompleteCount={incompleteCount}
             tasks={tasks}
             handleTaskComplete={handleTaskComplete}
             handleDeleteTask={handleDeleteTask}
@@ -108,37 +126,41 @@ function LeftPartOfPomodoro() {
         )}
 
         {/* Add new task button */}
-        {(ButtonText === "Pending") && tasks.length > 0 && !isAdding && (
-          <div className="w-full px-3 mt-2">
-            <button
-              onClick={() => setIsAdding(true)}
-              className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500 hover:text-zinc-200"
-            >
-              <div className="flex items-center gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center rounded-md"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5v14"></path>
-                </svg>
-                <p className="text-zinc-500 text-[14px] transition-colors duration-100 group-hover:text-zinc-200">
-                  Add new task
-                </p>
-              </div>
-            </button>
-          </div>
-        )}
+        {ButtonText === "Pending" &&
+          tasks.length > 0 &&
+          !isAdding &&
+          incompleteCount < 7 && (
+            <div className="w-full px-3 mt-2">
+              <button
+                onClick={() => setIsAdding(true)}
+                className="flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-zinc-700 px-3 py-1.5 text-sm text-zinc-500 transition-colors duration-100 group hover:border-zinc-500 hover:text-zinc-200"
+              >
+                <div className="flex items-center gap-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-plus flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center rounded-md"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5v14"></path>
+                  </svg>
+                  <p className="text-zinc-500 text-[14px] transition-colors duration-100 group-hover:text-zinc-200">
+                    Add new task
+                  </p>
+                </div>
+              </button>
+            </div>
+          )}
 
-        {isAdding && (
+        {/* Add new task button when no tasks are present */}
+        {isAdding && incompleteCount != 7 && (
           <TaskEditing
             onSave={(task) => addNewTask(task)}
             onCancel={() => setIsAdding(false)}
@@ -146,6 +168,8 @@ function LeftPartOfPomodoro() {
             taskLength={tasks.length}
           />
         )}
+
+        {/* Runs when task is adde for the first time */}
         {AddingFirstTask && (
           <TaskEditing
             onSave={(task) => addNewTask(task)}
@@ -157,6 +181,30 @@ function LeftPartOfPomodoro() {
             taskLength={tasks.length}
           />
         )}
+
+        {
+          // Show a message when the task limit is reached
+          (ButtonText === "Pending" ? incompleteCount == 7 : completedCount == 7) && (
+            <button className="flex  h-[34px] mx-3 items-center justify-center gap-2 rounded-md border border-yellow-500 bg-yellow-400 p-2 text-sm text-black cursor-not-allowed mt-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-flag h-4 w-4"
+              >
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                <line x1="4" x2="4" y1="22" y2="15"></line>
+              </svg>
+              {ButtonText === "Pending" ? "Task Limit Reached" : "Completed Task Limit Reached"}
+            </button>
+          )
+        }
 
         {/* No tasks message */}
         {!tasks.length && !AddingFirstTask && (
@@ -180,14 +228,18 @@ function LeftPartOfPomodoro() {
             </div>
             <div className="flex flex-col items-center ">
               <p className="text-[14px] mb-1 text-zinc-600 ">
-                {(ButtonText === "Pending") ? "No tasks for this day" : "No completed tasks for this day"}
+                {ButtonText === "Pending"
+                  ? "No tasks for this day"
+                  : "No completed tasks for this day"}
               </p>
-              {(ButtonText === "Pending") && <p
-                onClick={() => setAddingFirstTask(true)}
-                className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer"
-              >
-                Add a new task
-              </p>}
+              {ButtonText === "Pending" && (
+                <p
+                  onClick={() => setAddingFirstTask(true)}
+                  className="text-[14px] text-zinc-500 underline hover:text-zinc-100 cursor-pointer"
+                >
+                  Add a new task
+                </p>
+              )}
             </div>
           </div>
         )}
