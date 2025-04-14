@@ -12,7 +12,7 @@ import SmallScreenSVG from "../svg/SmallScreenSVG";
 import { useLocation } from "react-router-dom";
 
 
-function RightPartOfPomodoro() {
+function RightPartOfPomodoro({isUsedForTimer}) {
   const location = useLocation();
   const {
     isInitialState,
@@ -141,13 +141,13 @@ function RightPartOfPomodoro() {
       }
     >
       <div className="w-full flex gap-1 items-end justify-end">
-        <AdjustManually />
+        {!isUsedForTimer && <AdjustManually />}
         {!isFullScreen ? <FullscreenSVG /> : <SmallScreenSVG />}
       </div>
 
       <div className="w-[307px] flex flex-col ">
         <div className="w-full flex flex-col items-center justify-center p-2">
-          <div className="flex items-center justify-center gap-2 w-full">
+          {!isUsedForTimer && <div className="flex items-center justify-center gap-2 w-full">
             <Button
               onClick={() => {
                 handleBreakTimeChange("Focus");
@@ -172,7 +172,7 @@ function RightPartOfPomodoro() {
               text={`${isWidthSmaller ? "Long" : "Long Break"}`}
               classes={breakTime === "Long Break" ? "bg-zinc-800" : ""}
             />
-          </div>
+          </div>}
           <div className=" text-5xl sm:text-8xl font-sans font-bold text-zinc-50 flex text-end gap-3 py-10 px-2">
             <p>
               {Math.floor(Time / 60) < 10

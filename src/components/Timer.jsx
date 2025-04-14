@@ -75,10 +75,10 @@ function Timer() {
             setIsInitialState={setIsInitialState}
           />
         ) : (
-          <RightPartOfPomodoro key={location.pathname} />
+          <RightPartOfPomodoro isUsedForTimer={true} key={location.pathname} />
         )}
         {/* right part */}
-        <RightSideOfTimer preset={preset} setHour={setHour} setMinute={setMinute} />
+        {!isFullScreen && <RightSideOfTimer preset={preset} setHour={setHour} setMinute={setMinute} />}
       </div>
     </div>
   );
