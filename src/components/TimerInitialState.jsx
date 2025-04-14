@@ -9,7 +9,7 @@ import PlayButtonSVG from './../svg/PlayButtonSVG';
 
 function TimerInitialState() {
     const {
-      isFullScreen,
+      isFullScreen, setTimerOverlay
     } = useContext(GlobalContext);
 
   return (
@@ -40,7 +40,9 @@ function TimerInitialState() {
                 <p>Second</p>
               </div>
               <div className="mt-3 flex items-center gap-2 justify-center">
-                <SettingButtonInTimer/>
+                <SettingButtonInTimer
+                onClick={() => setTimerOverlay(true)}
+                />
                 <Button
                     text={"Start Timer"}
                     classes={"bg-zinc-800"}

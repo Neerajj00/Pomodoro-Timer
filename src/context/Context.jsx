@@ -10,7 +10,7 @@ export default function GlobalState({ children }) {
 
   const [selectedSound, setSelectedSound] = useState("rooster.wav"); // default
   const [audioPlayer, setAudioPlayer] = useState(null);
-
+  const sounds = ["rooster.wav", "digital.wav", "emergency.wav", "fire.wav"];
   const [isFullScreen, setisFullScreen] = useState(false);
 
   const playSound = (sound) => {
@@ -107,10 +107,13 @@ export default function GlobalState({ children }) {
   const [breakTime, setBreakTime] = useState("Focus");
   const [sessionStartTime, setSessionStartTime] = useState(breakTimeOb[breakTime].time);
 
+  const [TimerOverlay, setTimerOverlay] = useState(false)
 
   return (
     <GlobalContext.Provider
       value={{
+        TimerOverlay, setTimerOverlay,
+        sounds,
         isFullScreen, setisFullScreen,
         sessionStartTime, setSessionStartTime,
         stopPlayingSound,

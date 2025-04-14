@@ -14,6 +14,7 @@ function AdjustManuallyOverlay() {
     breakTimeOb,
     setTime,
     breakTime,
+    sounds
   } = useContext(GlobalContext);
 
   
@@ -104,7 +105,7 @@ function AdjustManuallyOverlay() {
             Select Alarm Sound:
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {["rooster.wav", "digital.wav", "emergency.wav", "fire.wav"].map(
+            {sounds.map(
               (sound) => (
                 <button
                   key={sound}

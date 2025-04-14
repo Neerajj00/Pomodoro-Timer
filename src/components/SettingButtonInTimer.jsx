@@ -1,8 +1,10 @@
 import React from "react";
 
-function SettingButtonInTimer() {
+function SettingButtonInTimer({onClick}) {
   return (
-    <button class="flex h-[40px] items-center gap-2 rounded-md border border-zinc-700 px-3 py-1 text-sm text-zinc-400 outline-none transition-colors hover:bg-zinc-700 hover:text-zinc-200 md:h-[40px] md:px-5  md:text-base lg:h-[40px] lg:rounded-lg lg:text-base mt-1">
+    <button
+    onClick={onClick}
+    class="flex h-[40px] items-center gap-2 rounded-md border border-zinc-700 px-3 py-1 text-sm text-zinc-400 outline-none transition-colors hover:bg-zinc-700 hover:text-zinc-200 md:h-[40px] md:px-5  md:text-base lg:h-[40px] lg:rounded-lg lg:text-base mt-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="17"
