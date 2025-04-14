@@ -2,7 +2,7 @@ import React from 'react'
 import BoxContainer from './BoxContainer';
 import Button from './Button';
 
-function RightSideOfTimer({preset}) {
+function RightSideOfTimer({preset , setHour , setMinute}) {
 
   return (
     <BoxContainer
@@ -30,7 +30,18 @@ function RightSideOfTimer({preset}) {
 
             <div className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2  gap-3 w-full flex-wrap items-center">
               {preset.map((item, index) => {
-                return <Button key={index} text={item} classes={"bg-zinc-800 "}/>;
+                return <Button 
+                onClick={() => {
+                  setHour("");
+                  setMinute("");
+                  if(item.lastName === "hour"){
+                    setHour(item.value < 10 ? "0" + item.value : item.value);
+                  }
+                  if(item.lastName === "min"){
+                    setMinute(item.value < 10 ? "0" + item.value : item.value);
+                  }
+                }}
+                key={index} text={item.label} classes={"bg-zinc-800 "}/>;
               })}
             </div>
           </div>
