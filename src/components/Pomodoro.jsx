@@ -1,16 +1,27 @@
 
 // Pomodoro.jsx
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
 import { GlobalContext } from "../context/Context";
 import LeftPartOfPomodoro from "./LeftPartOfPomodoro";
 import RightPartOfPomodoro from './RightPartOfPomodoro';
+import { useLocation } from "react-router-dom";
 
 function Pomodoro() {
   const {
-    isFullScreen,
+    isFullScreen,setIsInitialState,setTime,setSessionStartTime,
   } = useContext(GlobalContext);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    setIsInitialState(true);
+    setTime(1500);  // 25 minutes
+    setSessionStartTime(1500);
+  }, []);
+  
+  
 
   return (
     <div className="flex pomodoro flex-col lg:h-[100vh] w-full">
@@ -24,7 +35,7 @@ function Pomodoro() {
       <div className="h-full flex flex-1 flex-grow flex-col-reverse lg:flex-row gap-3 p-3 ">
         {!isFullScreen && <LeftPartOfPomodoro/>}
 
-        <RightPartOfPomodoro/>
+        <RightPartOfPomodoro  key={location.pathname}/>
       </div>
     </div>
   );

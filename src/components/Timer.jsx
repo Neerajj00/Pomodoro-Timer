@@ -5,6 +5,8 @@ import TimerInitialState from "./TimerInitialState";
 import { GlobalContext } from "../context/Context";
 import RightSideOfTimer from "./RightSideOfTimer";
 import RightPartOfPomodoro from "./RightPartOfPomodoro";
+import { useLocation } from "react-router-dom";
+
 
 function Timer() {
   const { isFullScreen,setTime,setSessionStartTime,isInitialState , setIsInitialState } = useContext(GlobalContext);
@@ -13,7 +15,8 @@ function Timer() {
   const [second, setSecond] = useState("");
   
 
-  
+  const location = useLocation();
+
   const [preset, setPreset] = useState([
     "5 min",
     "10 min",
@@ -38,7 +41,14 @@ function Timer() {
       setSessionStartTime(totalSeconds);
     }
   }
-  
+
+useEffect(() => {
+  // reset Timer page manually
+  setIsInitialState(true);
+  setTime(0);  // Timer page usually starts empty
+  setSessionStartTime(0);
+}, []);
+
 
   useEffect(()=>{
     setTimerFromTemp();
@@ -62,7 +72,7 @@ function Timer() {
           second={second}
           setSecond={setSecond}
           setIsInitialState={setIsInitialState}
-        /> : <RightPartOfPomodoro />
+        /> : <RightPartOfPomodoro  key={location.pathname} />
         }
         {/* right part */}
         <RightSideOfTimer preset={preset} />

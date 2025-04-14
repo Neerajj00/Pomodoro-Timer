@@ -9,8 +9,11 @@ import PauseButtonSVG from "../svg/PauseButtonSVG";
 import PlayButtonSVG from "../svg/PlayButtonSVG";
 import ResetButtonSVG from "../svg/ResetButtonSVG";
 import SmallScreenSVG from "../svg/SmallScreenSVG";
+import { useLocation } from "react-router-dom";
+
 
 function RightPartOfPomodoro() {
+  const location = useLocation();
   const {
     isInitialState,
     setIsInitialState,
@@ -35,11 +38,24 @@ function RightPartOfPomodoro() {
 
   useEffect(() => {
     console.log("isInitialState:", isInitialState);
-    if (!isInitialState) {
+    if (!isInitialState && location.pathname !== '/') {
       start();
     }
   }, [isInitialState]);
 
+  useEffect(() => {
+    console.log(location.pathname)
+    return () => {
+      clearInterval(intervalRef.current);
+      setTimeStarted(false);
+      setHasStarted(false);
+      setIsPaused(false);
+      setIsInitialState(true);
+      stopAlarmSound();
+      console.log("Unmounted and cleaned RightPartOfPomodoro");
+    };
+  }, []);
+  
   function handleBreakTimeChange(buttonText) {
     clearInterval(intervalRef.current);
     setTimeStarted(false);
