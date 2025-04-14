@@ -23,8 +23,6 @@ function Pomodoro() {
     selectedSound,
     Time,
     setTime,
-    date,
-    month,
     breakTimeOb,
     breakTime,
     setBreakTime,
