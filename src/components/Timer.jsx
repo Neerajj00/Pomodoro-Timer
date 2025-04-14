@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
-import Button from "./Button";
-import BoxContainer from "./BoxContainer";
 import TimerInitialState from "./TimerInitialState";
 import { GlobalContext } from "../context/Context";
 import RightSideOfTimer from "./RightSideOfTimer";
 import RightPartOfPomodoro from "./RightPartOfPomodoro";
 
 function Timer() {
-  const { isFullScreen,setTime,setSessionStartTime } = useContext(GlobalContext);
+  const { isFullScreen,setTime,setSessionStartTime,isInitialState , setIsInitialState } = useContext(GlobalContext);
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
   const [second, setSecond] = useState("");
-  const [isInitialState , setIsInitialState] = useState(true);
+  
 
   
   const [preset, setPreset] = useState([
@@ -45,7 +43,7 @@ function Timer() {
   useEffect(()=>{
     setTimerFromTemp();
     console.log("hour:", hour, "minute:", minute, "second:", second);
-  },[hour, minute, second]);
+  },[hour, minute, second , isInitialState]);
 
   return (
     <div className="flex flex-col h-[100vh] w-full">
@@ -64,7 +62,7 @@ function Timer() {
           second={second}
           setSecond={setSecond}
           setIsInitialState={setIsInitialState}
-        /> : <RightPartOfPomodoro isInitialState={isInitialState}/>
+        /> : <RightPartOfPomodoro />
         }
         {/* right part */}
         <RightSideOfTimer preset={preset} />

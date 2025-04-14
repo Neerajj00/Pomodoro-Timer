@@ -13,6 +13,8 @@ export default function GlobalState({ children }) {
   const sounds = ["rooster.wav", "digital.wav", "emergency.wav", "fire.wav"];
   const [isFullScreen, setisFullScreen] = useState(false);
 
+  const [isInitialState , setIsInitialState] = useState(true); // timer ka intitial state
+
   const playSound = (sound) => {
     if (audioPlayer) {
       audioPlayer.pause();
@@ -112,6 +114,7 @@ export default function GlobalState({ children }) {
   return (
     <GlobalContext.Provider
       value={{
+        isInitialState , setIsInitialState,
         TimerOverlay, setTimerOverlay,
         sounds,
         isFullScreen, setisFullScreen,
