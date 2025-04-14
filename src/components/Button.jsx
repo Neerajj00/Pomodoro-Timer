@@ -11,7 +11,7 @@ function Button({ onClick, text, isPlayButton, classes , svg }) {
   px-4 py-3 mt-1 sm:px-3 sm:py-2
   cursor-pointer duration-100 transition-all`}
     >
-      {isPlayButton ? isWidthSmaller ? svg : text : text}
+      {isPlayButton ? (isWidthSmaller ? svg : text) : text}
     </button>
   );
 }

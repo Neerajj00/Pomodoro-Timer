@@ -4,6 +4,8 @@ import FullscreenSVG from "../svg/FullscreenSVG";
 import Button from './Button'
 import SmallScreenSVG from '../svg/SmallScreenSVG'
 import { GlobalContext } from '../context/Context'
+import SettingButtonInTimer from './SettingButtonInTimer';
+import PlayButtonSVG from './../svg/PlayButtonSVG';
 
 function TimerInitialState() {
     const {
@@ -37,13 +39,14 @@ function TimerInitialState() {
                 <p>Minute</p>
                 <p>Second</p>
               </div>
-              <div className="mt-3">
+              <div className="mt-3 flex items-center gap-2 justify-center">
+                <SettingButtonInTimer/>
                 <Button
-                  text={"Start Timer"}
-                  isPlayButton={true}
-                  playButtonAlways={true}
-                  classes={"bg-zinc-800"}
-                />
+                    text={"Start Timer"}
+                    classes={"bg-zinc-800"}
+                    isPlayButton={true}
+                    svg={<PlayButtonSVG />}
+                  />
               </div>
             </div>
           </div>
