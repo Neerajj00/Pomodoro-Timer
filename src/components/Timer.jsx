@@ -15,6 +15,7 @@ function Timer() {
   const [second, setSecond] = useState("");
   const [isInitialState , setIsInitialState] = useState(true);
 
+  
   const [preset, setPreset] = useState([
     "5 min",
     "10 min",
