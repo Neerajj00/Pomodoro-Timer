@@ -21,7 +21,6 @@ function LeftPartOfPomodoro() {
   const [EditingTaskId, setEditingTaskId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [ButtonText, setButtonText] = useState("Pending");
-  const [maxLength, setMaxLength] = useState(7);
   const [completedCount, setCompletedCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
 
@@ -57,7 +56,7 @@ function LeftPartOfPomodoro() {
 
     setCompletedCount(completed);
     setIncompleteCount(incomplete);
-  }, [tasks]); // <- this runs every time tasks change
+  }, [tasks]);
 
   useEffect(() => {
     const tasksString = JSON.stringify(tasks);
