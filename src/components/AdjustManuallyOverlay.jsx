@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../context/Context";
-import { X } from "lucide-react";
+import { Check, Play, X } from "lucide-react";
 
 function AdjustManuallyOverlay() {
   const {
@@ -14,19 +14,16 @@ function AdjustManuallyOverlay() {
     breakTimeOb,
     setTime,
     breakTime,
-    sounds
+    sounds,
   } = useContext(GlobalContext);
 
-  
   const [localBreakTimes, setLocalBreakTimes] = useState({
     Focus: breakTimeOb["Focus"].time / 60,
     "Short Break": breakTimeOb["Short Break"].time / 60,
     "Long Break": breakTimeOb["Long Break"].time / 60,
   });
 
-
   function handleUpdateSettings() {
-
     // 2. Update breakTimeOb fully
     setBreakTimeOb({
       Focus: { time: localBreakTimes["Focus"] * 60 },
@@ -57,7 +54,6 @@ function AdjustManuallyOverlay() {
     { label: "Short break (min)", key: "Short Break" },
     { label: "Long break (min)", key: "Long Break" },
   ];
-
 
   const handleSoundSelect = (sound) => {
     setSelectedSound(sound);
@@ -105,19 +101,22 @@ function AdjustManuallyOverlay() {
             Select Alarm Sound:
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {sounds.map(
-              (sound) => (
-                <button
-                  key={sound}
-                  onClick={() => handleSoundSelect(sound)}
-                  className={`p-2 rounded ${
-                    selectedSound === sound ? "bg-green-600" : "bg-zinc-700"
-                  } text-white hover:bg-zinc-600 transition`}
-                >
-                  {sound.split(".")[0]}
-                </button>
-              )
-            )}
+            {sounds.map((sound) => (
+              <button
+                key={sound}
+                onClick={() => handleSoundSelect(sound)}
+                className={`flex cursor-pointer items-center rounded-full px-2.5 py-0.5 text-xs uppercase tracking-wide text-zinc-900 ${
+                  selectedSound === sound ? "bg-zinc-100" : "bg-zinc-600"
+                } `}
+              >
+                {selectedSound === sound ? (
+                  <Check className="w-4 h-4 mr-1.5" />
+                ) : (
+                  <Play className="w-4 h-4 mr-1.5" />
+                )}
+                {sound.slice(0, -4) /* Remove the last 4 characters */}
+              </button>
+            ))}
           </div>
         </div>
 
