@@ -1,53 +1,214 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import NavbarButton from "./NavbarButton";
 import Button from "./Button";
 import BoxContainer from "./BoxContainer";
-import FullscreenSVG from './../svg/FullscreenSVG';
-import SmallScreenSVG from './../svg/SmallScreenSVG';
+import FullscreenSVG from "./../svg/FullscreenSVG";
+import SmallScreenSVG from "./../svg/SmallScreenSVG";
 import { GlobalContext } from "../context/Context";
+import StopWatchTimeStamp from "./StopWatchTimeStamp";
+import PlayButtonSVG from "./../svg/PlayButtonSVG";
+import PauseButtonSVG from "./../svg/PauseButtonSVG";
+import ResetButtonSVG from "./../svg/ResetButtonSVG";
+import LapSVG from './../svg/LapSVG';
 
 function Stopwatch() {
-  const {isFullScreen} = useContext(GlobalContext);
+  const { isFullScreen } = useContext(GlobalContext);
+  const [TimeStamp, setTimeStamp] = useState([
+    {
+      id: 1,
+      duration: {
+        minutes: 0,
+        seconds: 1,
+        milliseconds: 301,
+      },
+      overallTime: {
+        minutes: 0,
+        seconds: 1,
+        milliseconds: 301,
+      },
+    },
+  ]);
+
+  const [timeElapsed, setTimeElapsed] = useState(0);
+  const intervalRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const [TimeStarted, setTimeStarted] = useState(false);
+  const [HasStarted, setHasStarted] = useState(false);
+  const [IsPaused, setIsPaused] = useState(false);
+
+  function startStopwatch() {
+    setHasStarted(true);
+    setTimeStarted(true);
+    startTimeRef.current = Date.now() - timeElapsed;
+
+    intervalRef.current = setInterval(() => {
+      setTimeElapsed(Date.now() - startTimeRef.current);
+      const elapsed = Date.now() - startTimeRef.current;
+      const minutes = Math.floor((elapsed % 3600000) / 60000);
+      const seconds = Math.floor((elapsed % 60000) / 1000);
+      const milliseconds = Math.floor((elapsed % 1000) / 10);
+      
+    }, 10); // update every 10ms
+  }
+
+  const lapRef = useRef(null);
+  function addLap() {
+    let elapsed;
+    let minutes;
+    let seconds;
+    let milliseconds;
+    lapRef.current = setInterval(() => {
+      elapsed = Date.now() - startTimeRef.current;
+      minutes = Math.floor((elapsed % 3600000) / 60000);
+      seconds = Math.floor((elapsed % 60000) / 1000);
+      milliseconds = Math.floor((elapsed % 1000) / 10);
+    },10);
+    setTimeStamp((prev) => {
+      const newLap = {
+        id: prev.length + 1,
+        duration: {
+          minutes: minutes,
+          seconds: seconds,
+          milliseconds: milliseconds,
+        },
+        overallTime: {
+          minutes: Math.floor(timeElapsed / 60000),
+          seconds: Math.floor((timeElapsed % 60000) / 1000),
+          milliseconds: Math.floor((timeElapsed % 1000) / 10),
+        },
+      };
+      return [...prev, newLap];
+    });
+  }
+  function stopStopwatch() {
+    setIsPaused(true);
+    setTimeStarted(false);
+    clearInterval(intervalRef.current);
+  }
+
+  function resetStopwatch() {
+    setHasStarted(false);
+    setTimeStarted(false);
+    setIsPaused(false);
+    clearInterval(intervalRef.current);
+    setTimeElapsed(0);
+  }
+
   return (
     <div className="flex flex-col h-[100vh] w-full">
-      {!isFullScreen && <Navbar
-        NavbarButton={NavbarButton}
-        leftMostText={"Stopwatch"}
-      />}
+      {!isFullScreen && (
+        <Navbar NavbarButton={NavbarButton} leftMostText={"Stopwatch"} />
+      )}
 
       {/* main content */}
       <div className="h-full flex flex-1 flex-grow flex-col lg:flex-row gap-3 p-3 ">
         {/* leftpart */}
         <BoxContainer
-          classes={
-            "w-full flex item-center justify-between flex-col  "
-          }
+          classes={"w-full flex item-center justify-between flex-col  "}
         >
           <div className="w-full flex gap-1 items-end justify-end">
-        {!isFullScreen ? <FullscreenSVG /> : <SmallScreenSVG />}
-      </div>
-            <div className="h-[200px]  flex w-full flex-col lg:h-full items-center justify-center">
-              <p class="mb-3 flex flex-row gap-2 font-mono text-3xl font-medium tabular-nums md:mb-5 md:text-5xl lg:mb-7 lg:gap-5 lg:text-7xl">
-                <span>
-                  00
-                  <span class="ml-1 text-lg text-zinc-500 md:text-2xl">s</span>
+            {!isFullScreen ? <FullscreenSVG /> : <SmallScreenSVG />}
+          </div>
+          <div className="h-[200px]  flex w-full flex-col lg:h-full items-center justify-center">
+            <p className="mb-3 text-zinc-50 flex flex-row gap-2 font-mono text-3xl font-medium tabular-nums md:mb-5 md:text-5xl lg:mb-7 lg:gap-5 lg:text-7xl">
+              {Math.floor(timeElapsed / 60000) > 0 && <span>
+              {String(Math.floor(timeElapsed / 60000)).padStart(2, "0")}
+                <span className="ml-1 text-lg text-zinc-500 md:text-2xl">
+                  m
                 </span>
-                <span>
-                  000
-                  <span class="ml-1 text-lg text-zinc-500 md:text-2xl">ms</span>
+              </span>}
+              <span>
+              {String(Math.floor((timeElapsed % 60000) / 1000)).padStart(2, "0")}
+                <span className="ml-1 text-lg text-zinc-500 md:text-2xl">
+                  s
                 </span>
-              </p>
-              <Button text={"Start Timer"}/>
+              </span>
+              <span>
+              {String(Math.floor((timeElapsed % 1000) / 10)).padStart(2, "0")}
+                <span className="ml-1 text-lg text-zinc-500 md:text-2xl">
+                  ms
+                </span>
+              </span>
+            </p>
+            <div className="mt-3 flex items-center gap-2">
+              {!TimeStarted && !IsPaused && (
+                <Button
+                  onClick={() => startStopwatch()}
+                  text={"Start"}
+                  classes={"bg-zinc-800"}
+                  isPlayButton={true}
+                  svg={<PlayButtonSVG />}
+                />
+              )}
+
+              {!TimeStarted && IsPaused && (
+                <Button
+                  onClick={() => startStopwatch()}
+                  text={"Resume"}
+                  classes={"bg-zinc-800"}
+                  isPlayButton={true}
+                  svg={<PlayButtonSVG />}
+                />
+              )}
+              {TimeStarted && (
+                <Button
+                  onClick={() => addLap()}
+                  text={"Lap"}
+                  classes={"bg-zinc-800"}
+                  isPlayButton={true}
+                  svg={<LapSVG />}
+                />
+              )}
+
+              {TimeStarted && (
+                <Button
+                  onClick={() => stopStopwatch()}
+                  text={"Pause"}
+                  classes={"bg-zinc-800"}
+                  isPlayButton={true}
+                  svg={<PauseButtonSVG />}
+                />
+              )}
+
+              {HasStarted && (
+                <Button
+                  onClick={() => resetStopwatch()}
+                  text={"Reset"}
+                  classes={"bg-zinc-800"}
+                  isPlayButton={true}
+                  svg={<ResetButtonSVG />}
+                />
+              )}
             </div>
+          </div>
         </BoxContainer>
 
         {/* right part */}
-        {!isFullScreen && <BoxContainer
-          classes={"sm:h-[192px] sm:h-full h-full w-full lg:w-[620px] bg-amber-400"}
-        >
-          
-        </BoxContainer>}
+        {!isFullScreen && (
+          <BoxContainer
+            classes={
+              "sm:h-[192px] p-0 sm:h-full h-full w-full lg:w-[620px] bg-amber-400"
+            }
+          >
+            <div className="hidden items-center justify-between px-5 pb-2 pt-3 text-xs tracking-[0.15em] text-zinc-600 sm:flex">
+              <span className="w-[30px] text-right uppercase">Lap</span>
+              <span className="w-[180px] text-right uppercase">Lap Time</span>
+              <span className="w-[180px] text-right uppercase">
+                Overall Time
+              </span>
+            </div>
+            {TimeStamp.length === 0 && (
+              <div className="flex h-full items-center justify-center w-full text-md text-zinc-700">
+                No laps yet
+              </div>
+            )}
+
+            {TimeStamp &&
+              TimeStamp.length > 0 &&
+              TimeStamp.map((item) => <StopWatchTimeStamp key={item.id} item={item} />)}
+          </BoxContainer>
+        )}
       </div>
     </div>
   );
