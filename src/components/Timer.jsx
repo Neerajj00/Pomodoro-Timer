@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 function Timer() {
   const {
+    preset, setPreset,
     isFullScreen,
     setTime,
     setSessionStartTime,
@@ -22,16 +23,6 @@ function Timer() {
 
   const location = useLocation();
 
-  const [preset, setPreset] = useState([
-    { label: "5 min", value: 5 ,lastName : "min"},
-    { label: "10 min", value: 10 ,lastName : "min"},
-    { label: "15 min", value: 15 ,lastName : "min"},
-    { label: "20 min", value: 20 ,lastName : "min"},
-    { label: "30 min", value: 30 ,lastName : "min"},
-    { label: "1 hour", value: 1 ,lastName : "hour"},
-    { label: "2 hour", value: 2 ,lastName : "hour"},
-    { label: "3 hour", value: 3 ,lastName : "hour"},
-  ]);
 
   function setTimerFromTemp() {
     const totalSeconds =
@@ -80,7 +71,7 @@ function Timer() {
           <RightPartOfPomodoro isUsedForTimer={true} key={location.pathname} initialTimer={initialTimer} />
         )}
         {/* right part */}
-        {!isFullScreen && <RightSideOfTimer preset={preset} setHour={setHour} setMinute={setMinute} />}
+        {!isFullScreen && <RightSideOfTimer setPreset={setPreset} preset={preset} setHour={setHour} setMinute={setMinute} />}
       </div>
     </div>
   );

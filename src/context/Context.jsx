@@ -105,16 +105,30 @@ export default function GlobalState({ children }) {
     "Long Break": { time: 15 * 60 },
   });
 
+  const [preset, setPreset] = useState([
+    { label: "5 min", value: 5 ,lastName : "min"},
+    { label: "10 min", value: 10 ,lastName : "min"},
+    { label: "15 min", value: 15 ,lastName : "min"},
+    { label: "20 min", value: 20 ,lastName : "min"},
+    { label: "30 min", value: 30 ,lastName : "min"},
+    { label: "1 hour", value: 1 ,lastName : "hour"},
+    { label: "2 hour", value: 2 ,lastName : "hour"},
+    { label: "3 hour", value: 3 ,lastName : "hour"},
+  ]);
+
   const [Time, setTime] = useState(25 * 60);
   const [breakTime, setBreakTime] = useState("Focus");
   const [sessionStartTime, setSessionStartTime] = useState(breakTimeOb[breakTime].time);
 
   const [TimerOverlay, setTimerOverlay] = useState(false)
+  const [isTimerPresetOverlay, setIsTimerPresetOverlay] = useState(false)
 
   return (
     <GlobalContext.Provider
       value={{
+        preset, setPreset,
         isInitialState , setIsInitialState,
+        isTimerPresetOverlay, setIsTimerPresetOverlay,
         TimerOverlay, setTimerOverlay,
         sounds,
         isFullScreen, setisFullScreen,

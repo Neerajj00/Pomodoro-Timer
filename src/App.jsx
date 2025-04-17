@@ -8,15 +8,17 @@ import AdjustManuallyOverlay from './components/AdjustManuallyOverlay';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TimerSettingOverlay from './components/TimerSettingOverlay';
+import TimerPresetOverlay from './components/TimerPresetOverlay';
 
 function App() {
-  const {isFullScreen, displayMenuOverlay ,displayAdjustManuallyOverlay,TimerOverlay } = useContext(GlobalContext);
+  const {isTimerPresetOverlay,isFullScreen, displayMenuOverlay ,displayAdjustManuallyOverlay,TimerOverlay } = useContext(GlobalContext);
 
   return (
     <>
     {displayMenuOverlay && <MenuOverlay/>}
     {displayAdjustManuallyOverlay && <AdjustManuallyOverlay />}
     {TimerOverlay &&  <TimerSettingOverlay/>}
+    {isTimerPresetOverlay && <TimerPresetOverlay/>}
     <div className='outer-container flex flex-row h-full lg:h-[100vh] z-10'>
       {!isFullScreen && <Sidebar/>}
       <main className='main-content bg-black w-full h-full lg:h-[100vh]'>

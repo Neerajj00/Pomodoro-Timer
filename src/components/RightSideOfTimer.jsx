@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import BoxContainer from './BoxContainer';
 import Button from './Button';
+import { GlobalContext } from '../context/Context';
 
-function RightSideOfTimer({preset , setHour , setMinute}) {
+function RightSideOfTimer({ setPreset ,preset , setHour , setMinute}) {
+
+  const {setIsTimerPresetOverlay} = useContext(GlobalContext);
 
   return (
     <BoxContainer
           classes={"sm:h-[192px] sm:h-full lg:w-[398px] bg-amber-400"}
         >
           <div className="h-full w-full flex flex-col">
-            <button className="cursor-pointer my-1 flex items-center justify-center gap-1 rounded-full px-5  text-xs uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-zinc-400">
+            <button 
+            onClick={() => setIsTimerPresetOverlay(true) }
+            className="cursor-pointer my-1 flex items-center justify-center gap-1 rounded-full px-5  text-xs uppercase tracking-[0.15em] text-zinc-500 transition-all hover:text-zinc-400">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="17"
