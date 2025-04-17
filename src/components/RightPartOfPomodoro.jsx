@@ -12,7 +12,7 @@ import SmallScreenSVG from "../svg/SmallScreenSVG";
 import { useLocation } from "react-router-dom";
 
 
-function RightPartOfPomodoro({isUsedForTimer}) {
+function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
   const location = useLocation();
   const {
     isInitialState,
@@ -130,8 +130,13 @@ function RightPartOfPomodoro({isUsedForTimer}) {
     setTimeStarted(false);
     setHasStarted(false);
     setIsPaused(false);
-    setTime(breakTimeOb[breakTime].time);
-    setSessionStartTime(breakTimeOb[breakTime].time);
+    if(isUsedForTimer) {
+      setTime(initialTimer);
+      setSessionStartTime(initialTimer);
+    }else{
+      setTime(breakTimeOb[breakTime].time);
+      setSessionStartTime(breakTimeOb[breakTime].time);
+    }
   }
 
   return (

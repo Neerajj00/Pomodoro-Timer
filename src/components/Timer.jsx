@@ -18,6 +18,7 @@ function Timer() {
   const [hour, setHour] = useState("");
   const [minute, setMinute] = useState("");
   const [second, setSecond] = useState("");
+  const [initialTimer , setInitialTimer] = useState(0);
 
   const location = useLocation();
 
@@ -39,6 +40,7 @@ function Timer() {
       (parseInt(second) || 0);
 
     if (totalSeconds > 0) {
+      setInitialTimer(totalSeconds);
       setTime(totalSeconds);
       setSessionStartTime(totalSeconds);
     }
@@ -75,7 +77,7 @@ function Timer() {
             setIsInitialState={setIsInitialState}
           />
         ) : (
-          <RightPartOfPomodoro isUsedForTimer={true} key={location.pathname} />
+          <RightPartOfPomodoro isUsedForTimer={true} key={location.pathname} initialTimer={initialTimer} />
         )}
         {/* right part */}
         {!isFullScreen && <RightSideOfTimer preset={preset} setHour={setHour} setMinute={setMinute} />}
