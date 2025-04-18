@@ -133,6 +133,7 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
     if(isUsedForTimer) {
       setTime(initialTimer);
       setSessionStartTime(initialTimer);
+      setIsInitialState(true);
     }else{
       setTime(breakTimeOb[breakTime].time);
       setSessionStartTime(breakTimeOb[breakTime].time);

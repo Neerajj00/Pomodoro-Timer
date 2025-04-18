@@ -128,7 +128,7 @@ function Dailyplanner() {
   const [RingingTime, setRingingTime] = useState(20);
   const [HideAdjust, setHideAdjust] = useState(true);
   return (
-    <div className=" flex flex-col h-[100vh] w-full">
+    <div className=" flex flex-col lg:h-[100vh] w-full">
       {!isFullScreen && (
         <Navbar NavbarButton={NavbarButton} leftMostText={"20:20:20"} />
       )}
@@ -142,7 +142,7 @@ function Dailyplanner() {
             "h-full flex p-4 items-center flex-col justify-between w-full flex-1 border border-zinc-800"
           }
         >
-          <div className="w-full flex gap-1 items-end justify-end">
+          <div className="w-full flex gap-1 items-end mb-4 sm:mb-0 justify-end">
             <div className="relative">
               {!HideAdjust && (
                 <SmallDailyPlannerAdjust
@@ -176,7 +176,7 @@ function Dailyplanner() {
 
             <FullscreenSVG />
           </div>
-          <div className="mb-20 sm:mb-0 flex items-center flex-col">
+          <div className="mb-20  sm:mb-0 flex items-center flex-col">
             <div className="text-center mb-4">
               <h2 className="text-xl sm:text-2xl font-semibold text-zinc-100">
                 👀 The 20-20-20 Rule for Your Eyes
