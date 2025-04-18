@@ -89,6 +89,7 @@ function Stopwatch() {
   }
 
   function resetStopwatch() {
+    setTimeStamp([]);
     setHasStarted(false);
     setTimeStarted(false);
     setIsPaused(false);
