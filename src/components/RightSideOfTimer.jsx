@@ -9,7 +9,7 @@ function RightSideOfTimer({ setPreset ,preset , setHour , setMinute}) {
 
   return (
     <BoxContainer
-          classes={"sm:h-[192px] sm:h-full lg:w-[398px] bg-amber-400"}
+    classes={" p-0 h-full w-full lg:w-[400px] "}
         >
           <div className="h-full w-full flex flex-col">
             <button 

@@ -49,7 +49,7 @@ function Timer() {
   }, [hour, minute, second, isInitialState]);
 
   return (
-    <div className="flex flex-col h-[100vh] w-full">
+      <div className="flex flex-col h-full lg:h-[100vh] w-full">
       {!isFullScreen && (
         <Navbar NavbarButton={NavbarButton} leftMostText={"Timer"} />
       )}

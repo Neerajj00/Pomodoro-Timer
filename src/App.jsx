@@ -19,9 +19,9 @@ function App() {
     {displayAdjustManuallyOverlay && <AdjustManuallyOverlay />}
     {TimerOverlay &&  <TimerSettingOverlay/>}
     {isTimerPresetOverlay && <TimerPresetOverlay/>}
-    <div className='outer-container flex flex-row h-full lg:h-[100vh] z-10'>
+    <div className='outer-container flex flex-row min-h-screen lg:h-[100vh] z-10'>
       {!isFullScreen && <Sidebar/>}
-      <main className='main-content bg-black w-full h-full lg:h-[100vh]'>
+      <main className='main-content bg-black w-full h-full lg:h-full'>
         <Outlet />
       </main>
     </div>
