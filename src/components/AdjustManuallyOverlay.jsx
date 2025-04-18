@@ -81,7 +81,8 @@ function AdjustManuallyOverlay() {
               <label className="text-gray-400 text-sm">{option.label}</label>
               <input
                 type="number"
-                value={localBreakTimes[option.key]}
+                placeholder="Enter Time"
+                value={localBreakTimes[option.key] === 0 ? "" : localBreakTimes[option.key]}
                 onChange={(e) => {
                   const newMinutes = Math.max(0, e.target.value);
                   setLocalBreakTimes((prev) => ({

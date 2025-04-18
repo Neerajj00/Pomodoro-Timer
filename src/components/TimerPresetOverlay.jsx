@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import React, { useContext, useState } from 'react'
 import { GlobalContext } from '../context/Context';
+import { toast } from 'react-toastify';
 
 function TimerPresetOverlay() {
     const {setPreset , setIsTimerPresetOverlay} = useContext(GlobalContext);
@@ -8,6 +9,20 @@ function TimerPresetOverlay() {
     const [tempTimeMode , setTempTimeMode] = useState("min");
 
     function handleUpdateSettings() {
+      if(tempTimeMode === "hour" && tempTime > 24) {
+        toast.error("Time can't be more than 24 hours", {
+          position: "top-center",
+        });
+        setTempTime(0);
+        return;
+      }
+      if(tempTime.toString().length > 2) {
+        toast.error("Time can't be more than 99", {
+          position: "top-center",
+        });
+        setTempTime(0);
+        return;
+      }
         if (tempTimeMode === "min") {
             setPreset((prev) => [...prev, { label: `${tempTime} min`, value: tempTime, lastName: "min" }]);
         } else {
@@ -36,7 +51,8 @@ function TimerPresetOverlay() {
                   <label className="text-gray-400 text-sm">Enter the Time</label>
                   <input
                     type="number"
-                    value={tempTime}
+                    placeholder='Enter Time'
+                    value={tempTime === 0 ? "" : tempTime}
                     onChange={(e) => {
                       const newMinutes = Math.max(0, e.target.value);
                       setTempTime(newMinutes);
