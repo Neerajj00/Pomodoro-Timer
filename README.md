@@ -55,7 +55,7 @@ A modern, sleek, and highly functional productivity web app built with **React**
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/productivity-hub.git
+git clone https://github.com/Neeraj-gupta2005/Pomodoro-Timer.git
 
 # Navigate into the directory
 cd productivity-hub
