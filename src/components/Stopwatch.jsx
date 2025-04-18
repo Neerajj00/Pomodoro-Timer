@@ -15,19 +15,7 @@ import LapSVG from './../svg/LapSVG';
 function Stopwatch() {
   const { isFullScreen } = useContext(GlobalContext);
   const [TimeStamp, setTimeStamp] = useState([
-    {
-      id: 1,
-      duration: {
-        minutes: 0,
-        seconds: 1,
-        milliseconds: 301,
-      },
-      overallTime: {
-        minutes: 0,
-        seconds: 1,
-        milliseconds: 301,
-      },
-    },
+    
   ]);
 
   const [timeElapsed, setTimeElapsed] = useState(0);
@@ -52,35 +40,48 @@ function Stopwatch() {
     }, 10); // update every 10ms
   }
 
-  const lapRef = useRef(null);
   function addLap() {
-    let elapsed;
-    let minutes;
-    let seconds;
-    let milliseconds;
-    lapRef.current = setInterval(() => {
-      elapsed = Date.now() - startTimeRef.current;
-      minutes = Math.floor((elapsed % 3600000) / 60000);
-      seconds = Math.floor((elapsed % 60000) / 1000);
-      milliseconds = Math.floor((elapsed % 1000) / 10);
-    },10);
+    const elapsed = Date.now() - startTimeRef.current;
+  
+    const overallTime = {
+      minutes: Math.floor(elapsed / 60000),
+      seconds: Math.floor((elapsed % 60000) / 1000),
+      milliseconds: Math.floor((elapsed % 1000) / 10),
+    };
+  
     setTimeStamp((prev) => {
+      const lastLap = prev[prev.length - 1];
+      let duration;
+  
+      if (lastLap) {
+        const lastElapsed =
+          lastLap.overallTime.minutes * 60000 +
+          lastLap.overallTime.seconds * 1000 +
+          lastLap.overallTime.milliseconds * 10;
+  
+        const delta = elapsed - lastElapsed;
+  
+        duration = {
+          minutes: Math.floor(delta / 60000),
+          seconds: Math.floor((delta % 60000) / 1000),
+          milliseconds: Math.floor((delta % 1000) / 10),
+        };
+      } else {
+        // First lap — duration same as overall time
+        duration = { ...overallTime };
+      }
+  
       const newLap = {
         id: prev.length + 1,
-        duration: {
-          minutes: minutes,
-          seconds: seconds,
-          milliseconds: milliseconds,
-        },
-        overallTime: {
-          minutes: Math.floor(timeElapsed / 60000),
-          seconds: Math.floor((timeElapsed % 60000) / 1000),
-          milliseconds: Math.floor((timeElapsed % 1000) / 10),
-        },
+        overallTime,
+        duration,
       };
+  
       return [...prev, newLap];
     });
   }
+  
+
   function stopStopwatch() {
     setIsPaused(true);
     setTimeStarted(false);
@@ -206,7 +207,13 @@ function Stopwatch() {
 
             {TimeStamp &&
               TimeStamp.length > 0 &&
-              TimeStamp.map((item) => <StopWatchTimeStamp key={item.id} item={item} />)}
+              TimeStamp
+                .slice()
+                .sort((a, b) => b.id - a.id)
+                .map((item) => (
+                  <StopWatchTimeStamp key={item.id} item={item} />
+              ))}
+              
           </BoxContainer>
         )}
       </div>
