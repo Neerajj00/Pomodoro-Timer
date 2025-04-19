@@ -46,6 +46,8 @@ A modern, sleek, and highly functional productivity web app built with **React**
 
 ---
 🚀 **Live Website [Fokus](https://pomodorofokuss.vercel.app/)**
+---
+[ project idea ](https://roadmap.sh/projects/pomodoro-timer)
 
 ## 🛠️ Tech Stack
 
