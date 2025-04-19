@@ -1,3 +1,5 @@
+![Thumbnail](./public/images/thumbnail.png)
+
 # Productivity Hub ⏳🌍🎯
 
 A modern, sleek, and highly functional productivity web app built with **React**, **Vite**, and **Tailwind CSS**. Designed to help users stay focused, track time, and reduce screen fatigue—all in one place.
