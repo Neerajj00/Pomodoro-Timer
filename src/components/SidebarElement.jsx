@@ -23,6 +23,7 @@ function SidebarElement() {
         <NavLink
           key={index}
           to={item.to}
+          title={menuOpen ? "" : item.label}
           onClick={handleMenuClose}
           className={({ isActive }) =>
             `group flex h-[20px] items-center gap-2 cursor-pointer text-[14px] font-sans 
