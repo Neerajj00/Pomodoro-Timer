@@ -4,6 +4,8 @@
 
 A modern, sleek, and highly functional productivity web app built with **React**, **Vite**, and **Tailwind CSS**. Designed to help users stay focused, track time, and reduce screen fatigue—all in one place.
 
+> 🚀 **Inspired by [time.fyi](https://time.fyi/pomodoro)**, this productivity app recreates its core features with a modern touch — including **Pomodoro**, **countdown timer**, **stopwatch**, **world clock**, and a custom-built **20-20-20 eye strain reminder** for healthier screen time.
+
 ## 🌟 Features
 
 ### 1. 🌐 World Time Viewer
