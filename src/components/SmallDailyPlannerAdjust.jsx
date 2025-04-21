@@ -1,7 +1,7 @@
 import React from "react";
 import BoxContainer from "./BoxContainer";
 
-function SmallDailyPlannerAdjust({setMaxTime, MaxTime,reset , setHideAdjust, RingingTime, setRingingTime }) {
+function SmallDailyPlannerAdjust({reset , setHideAdjust, RingingTime, setRingingTime }) {
   return (
     <BoxContainer classes={"w-[200px] absolute right-6 top-0"}>
       <div className="flex flex-col gap-2">
@@ -14,19 +14,10 @@ function SmallDailyPlannerAdjust({setMaxTime, MaxTime,reset , setHideAdjust, Rin
           onChange={(e) => setRingingTime(e.target.value)}
           className="bg-zinc-800 outline-none border text-xs border-zinc-700 rounded-lg p-2 text-white"
         />
-        <h1 className="text-zinc-400 text-sm text-center font-sans">
-          Set your max Time(in min)
-        </h1>
-        <input
-          type="number"
-          value={MaxTime}
-          onChange={(e) => setMaxTime(e.target.value)}
-          className="bg-zinc-800 outline-none border text-xs border-zinc-700 rounded-lg p-2 text-white"
-        />
+        
         <button 
         onClick={() => {
             setRingingTime(RingingTime);
-            setMaxTime(MaxTime);
             setHideAdjust((prev) => !prev)
             reset();
         }}

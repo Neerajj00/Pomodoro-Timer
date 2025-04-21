@@ -4,7 +4,6 @@ import Button from "./Button";
 import FullscreenSVG from "./../svg/FullscreenSVG";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
-import PauseButtonSVG from "./../svg/PauseButtonSVG";
 import ResetButtonSVG from "./../svg/ResetButtonSVG";
 import PlayButtonSVG from "./../svg/PlayButtonSVG";
 import SmallDailyPlannerAdjust from "./SmallDailyPlannerAdjust";
@@ -13,9 +12,7 @@ import NavbarButton from './NavbarButton';
 function Dailyplanner() {
   const { isFullScreen, selectedSound } = useContext(GlobalContext);
   const [time, setTime] = useState(0);
-  const [maxTime, setMaxTime] = useState(60);
   const [CountDown, setCountDown] = useState(20);
-  const [IsPaused, setIsPaused] = useState(false);
   const [TimeStarted, setTimeStarted] = useState(false);
   const [HasStarted, setHasStarted] = useState(false);
   // const [isInBreak, setIsInBreak] = useState(false);
@@ -39,20 +36,7 @@ function Dailyplanner() {
   const timerRef = useRef(null); // store interval ID
   const countdownRef = useRef(null); // store countdown interval
 
-  function pause() {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-
-    if (countdownRef.current) {
-      clearInterval(countdownRef.current);
-      countdownRef.current = null;
-    }
-
-    setIsPaused(true);
-    setTimeStarted(false);
-  }
+ 
   function handleWidth() {
     const percentage = ((20 - CountDown) / 20) * 100;
     return percentage;
@@ -65,7 +49,6 @@ function Dailyplanner() {
     countdownRef.current = null;
     setTime(0);
     setCountDown(20);
-    setIsPaused(false);
     setTimeStarted(false);
     setHasStarted(false);
     isInBreak.current = false; // 🔁 reset break state
@@ -102,11 +85,6 @@ function Dailyplanner() {
   
         setTime(elapsedSeconds);
   
-        if (elapsedSeconds >= maxTime * 60) {
-          reset();
-          return;
-        }
-  
         if (elapsedSeconds > 0 && elapsedSeconds % (RingingTime * 60) === 0) {
           playSound();
           clearInterval(timerRef.current);
@@ -115,50 +93,6 @@ function Dailyplanner() {
           setCountDown(20);
           start(); // Start break countdown
         }
-      }, 1000);
-    }
-  }
-  function start() {
-    if (timerRef.current || countdownRef.current) return; // Already running
-    setTimeStarted(true);
-    setHasStarted(true);
-
-    if (isInBreak.current) {
-      let countdown = CountDown; // local variable to avoid stale closure
-      countdownRef.current = setInterval(() => {
-        countdown -= 1;
-        setCountDown(countdown); // update state
-        console.log(countdown);
-        if (countdown <= 0) {
-          playSound();
-          clearInterval(countdownRef.current);
-          countdownRef.current = null;
-          setCountDown(20); // reset for next break
-          isInBreak.current = false; // exit break
-          start();
-        }
-      }, 1000);
-    } else {
-      timerRef.current = setInterval(() => {
-        setTime((prevTime) => {
-          const newTime = prevTime + 1;
-          if (newTime >= (maxTime * 60)) {
-            reset();
-            return 0;
-          }
-          if (newTime % (RingingTime * 60) === 0) {
-            playSound();
-
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-
-            isInBreak.current = true;
-            setCountDown(20);
-            start();
-          }
-
-          return newTime;
-        });
       }, 1000);
     }
   }
@@ -198,8 +132,6 @@ function Dailyplanner() {
                   RingingTime={RingingTime}
                   setRingingTime={setRingingTime}
                   reset={reset}
-                  setMaxTime={setMaxTime}
-                  MaxTime={maxTime}
                 />
               )}
               <svg
@@ -255,7 +187,7 @@ function Dailyplanner() {
                   />
                 </div>
                 <div className="mt-3 flex items-center gap-2">
-                  {!TimeStarted && !IsPaused && (
+                  {!TimeStarted && (
                     <Button
                       onClick={() => start()}
                       text={"Start"}
@@ -265,29 +197,7 @@ function Dailyplanner() {
                     />
                   )}
 
-                  {!TimeStarted && HasStarted && IsPaused && (
-                    <Button
-                      onClick={() => start()}
-                      text={"Resume"}
-                      classes={"bg-zinc-800"}
-                      isPlayButton={true}
-                      svg={<PlayButtonSVG />}
-                    />
-                  )}
-
-                  {TimeStarted && HasStarted && (
-                    <Button
-                      onClick={() => {
-                        pause();
-                        stopAlarmSound();
-                      }}
-                      text={"Pause"}
-                      classes={"bg-zinc-800"}
-                      isPlayButton={true}
-                      svg={<PauseButtonSVG />}
-                    />
-                  )}
-
+                  
                   {HasStarted && (
                     <Button
                       onClick={() => {
