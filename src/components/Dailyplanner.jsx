@@ -19,6 +19,8 @@ function Dailyplanner() {
   const [TimeStarted, setTimeStarted] = useState(false);
   const [HasStarted, setHasStarted] = useState(false);
   // const [isInBreak, setIsInBreak] = useState(false);
+  const startTimestamp = useRef(null);
+
 
   function stopAlarmSound() {
     if (soundRef.current) {
@@ -70,6 +72,52 @@ function Dailyplanner() {
   }
   const isInBreak = useRef(false); // store break state
 
+  function start() {
+    if (timerRef.current || countdownRef.current) return; // Already running
+    setTimeStarted(true);
+    setHasStarted(true);
+  
+    if (isInBreak.current) {
+      let countdown = CountDown; // local variable to avoid stale closure
+      countdownRef.current = setInterval(() => {
+        countdown -= 1;
+        setCountDown(countdown); // update state
+        console.log(countdown);
+        if (countdown <= 0) {
+          playSound();
+          clearInterval(countdownRef.current);
+          countdownRef.current = null;
+          setCountDown(20); // reset for next break
+          isInBreak.current = false; // exit break
+          start();
+        }
+      }, 1000);
+    } else {
+      // 🔥 Accurate timer using real timestamps
+      startTimestamp.current = Date.now();
+  
+      timerRef.current = setInterval(() => {
+        const elapsedMs = Date.now() - startTimestamp.current;
+        const elapsedSeconds = Math.floor(elapsedMs / 1000);
+  
+        setTime(elapsedSeconds);
+  
+        if (elapsedSeconds >= maxTime * 60) {
+          reset();
+          return;
+        }
+  
+        if (elapsedSeconds > 0 && elapsedSeconds % (RingingTime * 60) === 0) {
+          playSound();
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+          isInBreak.current = true;
+          setCountDown(20);
+          start(); // Start break countdown
+        }
+      }, 1000);
+    }
+  }
   function start() {
     if (timerRef.current || countdownRef.current) return; // Already running
     setTimeStarted(true);
