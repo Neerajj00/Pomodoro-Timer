@@ -45,6 +45,9 @@ A modern, sleek, and highly functional productivity web app built with **React**
 - Continuous ambient playback with volume control.
 
 ---
+🚀 **Live Website [Fokus](https://pomodorofokuss.vercel.app/)**
+---
+[ project idea ](https://roadmap.sh/projects/pomodoro-timer)
 
 ## 🛠️ Tech Stack
 
