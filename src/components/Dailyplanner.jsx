@@ -41,6 +41,7 @@ function Dailyplanner() {
     const percentage = ((20 - CountDown) / 20) * 100;
     return percentage;
   }
+  // getting password
   function reset() {
     console.log("reset");
     clearInterval(timerRef.current);
