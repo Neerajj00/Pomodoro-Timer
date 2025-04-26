@@ -62,41 +62,41 @@ function Dailyplanner() {
     setHasStarted(true);
   
     if (isInBreak.current) {
-      let countdown = CountDown; // local variable to avoid stale closure
+      let countdown = CountDown; // local variable
       countdownRef.current = setInterval(() => {
         countdown -= 1;
         setCountDown(countdown); // update state
-        console.log(countdown);
         if (countdown <= 0) {
           playSound();
           clearInterval(countdownRef.current);
           countdownRef.current = null;
           setCountDown(20); // reset for next break
-          isInBreak.current = false; // exit break
-          start();
+          isInBreak.current = false;
+          start(); // Restart main timer
         }
       }, 1000);
     } else {
-      // 🔥 Accurate timer using real timestamps
-      startTimestamp.current = Date.now();
-  
+      startTimestamp.current = Date.now(); // Save starting time
+    
       timerRef.current = setInterval(() => {
-        const elapsedMs = Date.now() - startTimestamp.current;
+        const now = Date.now();
+        const elapsedMs = now - startTimestamp.current;
         const elapsedSeconds = Math.floor(elapsedMs / 1000);
-  
+    
         setTime(elapsedSeconds);
-  
-        if (elapsedSeconds > 0 && elapsedSeconds % (RingingTime * 60) === 0) {
+    
+        if (elapsedSeconds >= RingingTime * 60) {  // 🔥 CHANGED LINE 🔥
           playSound();
           clearInterval(timerRef.current);
           timerRef.current = null;
           isInBreak.current = true;
           setCountDown(20);
-          start(); // Start break countdown
+          start(); // Start break timer
         }
       }, 1000);
     }
   }
+  
 
   useEffect(() => {
     return () => {
