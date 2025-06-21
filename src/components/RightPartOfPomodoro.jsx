@@ -19,7 +19,6 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
     setIsInitialState,
     isWidthSmaller,
     isFullScreen,
-    sessionStartTime,
     setSessionStartTime,
     selectedSound,
     Time,
@@ -35,7 +34,11 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
 
   const intervalRef = useRef(null);
   const alarmSoundRef = useRef(null);
+  
+  const startTimestampRef = useRef(null);
+  const initialTimeLeftRef = useRef(null);
 
+  
   useEffect(() => {
     if (!isInitialState && location.pathname === '/timer') {
       start();
@@ -64,11 +67,20 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
     setSessionStartTime(breakTimeOb[buttonText].time);
   }
 
-  function handleTimeUpdate(time) {
-    const updateTime = parseInt(time) * 60;
-    setTime((prev) => prev + updateTime);
-    setSessionStartTime((prev) => prev + updateTime);
+  function handleTimeUpdate(minStr) {
+    const updateTime = parseInt(minStr) * 60;
+    setTime((prev) => {
+      const newTime = prev + updateTime;
+  
+      if (TimeStarted) {
+        startTimestampRef.current = Date.now();
+        initialTimeLeftRef.current = newTime;
+      }
+  
+      return newTime;
+    });
   }
+  
 
   function stopAlarmSound() {
     if (alarmSoundRef.current) {
@@ -80,65 +92,108 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
   }
 
   function handleWidth() {
-    const percentage = ((sessionStartTime - Time) / sessionStartTime) * 100;
+    if (!initialTimeLeftRef.current || !startTimestampRef.current) return 0;
+  
+    const elapsed = Math.floor((Date.now() - startTimestampRef.current) / 1000);
+    const total = initialTimeLeftRef.current;
+  
+    const percentage = Math.min((elapsed / total) * 100, 100); // cap at 100%
     return percentage;
   }
 
+
+  function playAlarm() {
+    if (!alarmSoundRef.current) {
+      alarmSoundRef.current = new Audio(`/audio/${selectedSound}`);
+    }
+  
+    alarmSoundRef.current.currentTime = 0;
+  
+    alarmSoundRef.current.play().catch((err) =>
+      console.error("Audio playback failed:", err)
+    );
+  
+    alarmSoundRef.current.onended = () => {
+      alarmSoundRef.current = null;
+      reset();
+      setIsInitialState(true);
+    };
+  }
+
+  
   function start() {
     setTimeStarted(true);
     setHasStarted(true);
     setIsPaused(false);
-
+    
+    startTimestampRef.current = Date.now(); // record the start time
+    initialTimeLeftRef.current = Time; // store the initial time left
+  
     intervalRef.current = setInterval(() => {
-      setTime((prev) => {
-        if (prev > 0) return prev - 1;
-        else {
-          clearInterval(intervalRef.current);
-
-          let playCount = 0;
-          const maxPlays = 3;
-
-          const playAlarm = () => {
-            if (!alarmSoundRef.current) {
-              alarmSoundRef.current = new Audio(`/audio/${selectedSound}`);
-            }
-            alarmSoundRef.current.currentTime = 0;
-            alarmSoundRef.current.play();
-
-            alarmSoundRef.current.onended = () => {
-              alarmSoundRef.current = null;
-              reset();
-              setIsInitialState(true);
-            };
-          };
-
-          playAlarm();
-          return 0;
-        }
-      });
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - startTimestampRef.current) / 1000); // how many seconds have passed since start
+      const remaining = initialTimeLeftRef.current - elapsedSeconds; // how many seconds remain
+  
+      if (remaining >= 0) {
+        setTime(remaining);
+      } else {
+        clearInterval(intervalRef.current);
+        playAlarm();
+      }
     }, 1000);
   }
+  
 
   function pause() {
     setTimeStarted(false);
     setIsPaused(true);
     clearInterval(intervalRef.current);
+  
+    // 👇 Only update if the timer is actually running
+    if (startTimestampRef.current && initialTimeLeftRef.current) {
+      const elapsed = Math.floor((Date.now() - startTimestampRef.current) / 1000);
+      const remaining = initialTimeLeftRef.current - elapsed;
+  
+      // Don't let it go negative
+      const safeRemaining = Math.max(remaining, 0);
+  
+      // Update visible time
+      setTime(safeRemaining);
+  
+      // Update refs to resume from this time later
+      initialTimeLeftRef.current = safeRemaining;
+      startTimestampRef.current = null; // clear start timestamp until resumed
+    }
   }
+  
 
   function reset() {
     clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  
     setTimeStarted(false);
     setHasStarted(false);
     setIsPaused(false);
-    if(isUsedForTimer) {
+  
+    if (isUsedForTimer) {
       setTime(initialTimer);
       setSessionStartTime(initialTimer);
-      setIsInitialState(true);
-    }else{
-      setTime(breakTimeOb[breakTime].time);
-      setSessionStartTime(breakTimeOb[breakTime].time);
+  
+      // Update tracking refs for date-based timer
+      initialTimeLeftRef.current = initialTimer;
+      startTimestampRef.current = null; // since we're not running now
+    } else {
+      const breakDuration = breakTimeOb[breakTime].time;
+      setTime(breakDuration);
+      setSessionStartTime(breakDuration);
+  
+      initialTimeLeftRef.current = breakDuration;
+      startTimestampRef.current = null;
     }
+  
+    setIsInitialState(true);
   }
+  
 
   return (
     <BoxContainer
