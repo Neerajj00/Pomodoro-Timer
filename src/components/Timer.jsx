@@ -23,6 +23,10 @@ function Timer() {
 
   const location = useLocation();
 
+  useEffect(() => {
+    document.title = "Timer";
+  })
+
 
   function setTimerFromTemp() {
     const totalSeconds =

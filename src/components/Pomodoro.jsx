@@ -16,6 +16,7 @@ function Pomodoro() {
 
 
   useEffect(() => {
+    document.title = "Pomodoro - Productivity Timer";
     setIsInitialState(true);
     setTime(1500);  // 25 minutes
     // setSessionStartTime(1500);

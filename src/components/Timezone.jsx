@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Navbar from "./Navbar";
 import BoxContainer from "./BoxContainer";
 import NavbarButton from "./NavbarButton";
@@ -7,6 +7,9 @@ import { GlobalContext } from "../context/Context";
 function Timezone() {
   const { hour, minute, ampm, is24Hr , day,date,month,year,} = useContext(GlobalContext);
 
+  useEffect(() => {
+    document.title = "Timezones";
+  })
   return (
     <div className="flex flex-col h-[100vh] w-full">
       <Navbar
