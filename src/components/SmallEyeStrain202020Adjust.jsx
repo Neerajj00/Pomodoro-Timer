@@ -1,7 +1,7 @@
 import React from "react";
 import BoxContainer from "./BoxContainer";
 
-function SmallDailyPlannerAdjust({reset , setHideAdjust, RingingTime, setRingingTime }) {
+function SmallEyeStrain202020Adjust({reset , setHideAdjust, RingingTime, setRingingTime }) {
   return (
     <BoxContainer classes={"w-[200px] absolute right-6 top-0"}>
       <div className="flex flex-col gap-2">
@@ -29,4 +29,4 @@ function SmallDailyPlannerAdjust({reset , setHideAdjust, RingingTime, setRinging
   );
 }
 
-export default SmallDailyPlannerAdjust;
+export default SmallEyeStrain202020Adjust;

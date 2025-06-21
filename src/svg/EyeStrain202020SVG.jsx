@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Dailyplanner({ isActive }) {
+function EyeStrain202020SVG({ isActive }) {
   return (
     <div className="cursor-pointer">
       <svg
@@ -26,4 +26,4 @@ function Dailyplanner({ isActive }) {
     )
 }
 
-export default Dailyplanner
+export default EyeStrain202020SVG;

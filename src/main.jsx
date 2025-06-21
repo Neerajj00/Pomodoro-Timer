@@ -6,7 +6,7 @@ import App from './App.jsx'
 import GlobalState from './context/Context.jsx'
 import Pomodoro from './components/Pomodoro.jsx';
 import Timezone from './components/Timezone.jsx';
-import Dailyplanner from './components/Dailyplanner.jsx';
+import EyeStrain202020 from './components/EyeStrain202020.jsx';
 import Timer from './components/Timer.jsx';
 import Stopwatch from './components/Stopwatch.jsx';
 
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
         element: <Timezone />
       },
       {
-        path: '/Dailyplanner',
-        element: <Dailyplanner />
+        path: '/EyeStrain202020',
+        element: <EyeStrain202020 />
       },
       {
         path: '/timer',

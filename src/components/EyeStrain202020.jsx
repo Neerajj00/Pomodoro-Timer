@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Button from "./Button";
-import FullscreenSVG from "./../svg/FullscreenSVG";
+import FullscreenSVG from "../svg/FullscreenSVG";
 import BoxContainer from "./BoxContainer";
 import { GlobalContext } from "../context/Context";
-import ResetButtonSVG from "./../svg/ResetButtonSVG";
-import PlayButtonSVG from "./../svg/PlayButtonSVG";
-import SmallDailyPlannerAdjust from "./SmallDailyPlannerAdjust";
+import ResetButtonSVG from "../svg/ResetButtonSVG";
+import PlayButtonSVG from "../svg/PlayButtonSVG";
+import SmallEyeStrain202020Adjust from "./SmallEyeStrain202020Adjust";
 import NavbarButton from './NavbarButton';
 
-function Dailyplanner() {
+function EyeStrain202020() {
   const { isFullScreen, selectedSound } = useContext(GlobalContext);
   const [time, setTime] = useState(0);
   const [CountDown, setCountDown] = useState(20);
@@ -150,7 +150,7 @@ function Dailyplanner() {
           <div className="w-full flex gap-1 items-end mb-4 sm:mb-0 justify-end">
             <div className="relative">
               {!HideAdjust && (
-                <SmallDailyPlannerAdjust
+                <SmallEyeStrain202020Adjust
                   setHideAdjust={setHideAdjust}
                   RingingTime={RingingTime}
                   setRingingTime={setRingingTime}
@@ -246,4 +246,4 @@ function Dailyplanner() {
   );
 }
 
-export default Dailyplanner;
+export default EyeStrain202020;

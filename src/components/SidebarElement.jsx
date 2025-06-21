@@ -2,7 +2,7 @@ import React, {  useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Timezones from "../svg/Timezones";
 import PomodoroSvg from "../svg/PomodoroSvg";
-import Dailyplanner from "./../svg/dailyplanner";
+import EyeStrain202020SVG from "./../svg/EyeStrain202020SVG";
 import Timer from "./../svg/Timer";
 import Stopwatch from "../svg/Stopwatch";
 import { GlobalContext } from "../context/Context";
@@ -10,7 +10,7 @@ import { GlobalContext } from "../context/Context";
 const menuItems = [
   { to: "/Timezone", icon: <Timezones />, label: "Timezones" },
   { to: "/", icon: <PomodoroSvg />, label: "Pomodoro" },
-  { to: "/Dailyplanner", icon: <Dailyplanner />, label: "Daily Planner" },
+  { to: "/EyeStrain202020", icon: <EyeStrain202020SVG />, label: "Daily Planner" },
   { to: "/timer", icon: <Timer />, label: "Timer" },
   { to: "/stopwatch", icon: <Stopwatch />, label: "StopWatch" },
 ];
