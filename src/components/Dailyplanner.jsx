@@ -15,87 +15,114 @@ function Dailyplanner() {
   const [CountDown, setCountDown] = useState(20);
   const [TimeStarted, setTimeStarted] = useState(false);
   const [HasStarted, setHasStarted] = useState(false);
-  // const [isInBreak, setIsInBreak] = useState(false);
+  
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+
+  const [RingingTime, setRingingTime] = useState(20);
+  const [HideAdjust, setHideAdjust] = useState(true);
+
   const startTimestamp = useRef(null);
+  const breakTimestamp = useRef(null);
 
-
+  const isInBreak = useRef(false); // store break state
+  const soundRef = useRef(null); // store sound reference
+  const timerRef = useRef(null); // store interval ID
+  const countdownRef = useRef(null); // store countdown interval
+  
+  function playSound() {
+    soundRef.current = new Audio(`/audio/${selectedSound}`);
+    soundRef.current.currentTime = 0;
+    soundRef.current.play().catch((e) => {
+      console.error("Audio playback failed:", e);
+    });
+  }
+  
   function stopAlarmSound() {
     if (soundRef.current) {
       soundRef.current.pause();
       soundRef.current.currentTime = 0;
     }
   }
-
-  const soundRef = useRef(null); // store sound reference
-
-  function playSound() {
-    soundRef.current = new Audio(`/audio/${selectedSound}`);
-    soundRef.current.play();
-  }
-
-  const timerRef = useRef(null); // store interval ID
-  const countdownRef = useRef(null); // store countdown interval
-
+  
  
   function handleWidth() {
-    const percentage = ((20 - CountDown) / 20) * 100;
-    return percentage;
+    if (isInBreak.current && breakTimestamp.current) {
+      const elapsed = Math.floor((Date.now() - breakTimestamp.current) / 1000);
+      return Math.min((elapsed / 20) * 100, 100);
+    }
+  
+    if (startTimestamp.current && RingingTime) {
+      const elapsed = Math.floor((Date.now() - startTimestamp.current) / 1000);
+      return Math.min((elapsed / (RingingTime * 60)) * 100, 100);
+    }
+  
+    return 0;
   }
-  // getting password
+  
+
   function reset() {
-    console.log("reset");
     clearInterval(timerRef.current);
     clearInterval(countdownRef.current);
+  
     timerRef.current = null;
     countdownRef.current = null;
     setTime(0);
     setCountDown(20);
     setTimeStarted(false);
     setHasStarted(false);
-    isInBreak.current = false; // 🔁 reset break state
+    isInBreak.current = false;
+  
+    startTimestamp.current = null;
+    breakTimestamp.current = null;
+
+    stopAlarmSound();
   }
-  const isInBreak = useRef(false); // store break state
+  
 
   function start() {
-    if (timerRef.current || countdownRef.current) return; // Already running
+    if (timerRef.current || countdownRef.current) return;
+  
     setTimeStarted(true);
     setHasStarted(true);
   
     if (isInBreak.current) {
-      let countdown = CountDown; // local variable
+      breakTimestamp.current = Date.now();
+  
       countdownRef.current = setInterval(() => {
-        countdown -= 1;
-        setCountDown(countdown); // update state
-        if (countdown <= 0) {
+        const elapsed = Math.floor((Date.now() - breakTimestamp.current) / 1000);
+        const remaining = 20 - elapsed;
+  
+        setCountDown(Math.max(remaining, 0));
+  
+        if (remaining <= 0) {
           playSound();
           clearInterval(countdownRef.current);
           countdownRef.current = null;
-          setCountDown(20); // reset for next break
+          setCountDown(20);
           isInBreak.current = false;
-          start(); // Restart main timer
+          start(); // restart main session
         }
       }, 1000);
     } else {
-      startTimestamp.current = Date.now(); // Save starting time
-    
+      startTimestamp.current = Date.now();
+  
       timerRef.current = setInterval(() => {
-        const now = Date.now();
-        const elapsedMs = now - startTimestamp.current;
-        const elapsedSeconds = Math.floor(elapsedMs / 1000);
-    
-        setTime(elapsedSeconds);
-    
-        if (elapsedSeconds >= RingingTime * 60) {  // 🔥 CHANGED LINE 🔥
+        const elapsed = Math.floor((Date.now() - startTimestamp.current) / 1000);
+        setTime(elapsed);
+  
+        if (elapsed >= RingingTime * 60) {
           playSound();
           clearInterval(timerRef.current);
           timerRef.current = null;
-          isInBreak.current = true;
+          isInBreak.current = true; 
           setCountDown(20);
-          start(); // Start break timer
+          start(); // start break timer
         }
       }, 1000);
     }
   }
+  
   
 
   useEffect(() => {
@@ -105,11 +132,6 @@ function Dailyplanner() {
     };
   }, []);
 
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-
-  const [RingingTime, setRingingTime] = useState(20);
-  const [HideAdjust, setHideAdjust] = useState(true);
   return (
     <div className=" flex flex-col lg:h-[100vh] w-full">
       {!isFullScreen && (
