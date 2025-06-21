@@ -64,7 +64,7 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
 
     setBreakTime(buttonText);
     setTime(breakTimeOb[buttonText].time);
-    setSessionStartTime(breakTimeOb[buttonText].time);
+    // setSessionStartTime(breakTimeOb[buttonText].time);
   }
 
   function handleTimeUpdate(minStr) {
@@ -177,7 +177,7 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
   
     if (isUsedForTimer) {
       setTime(initialTimer);
-      setSessionStartTime(initialTimer);
+      // setSessionStartTime(initialTimer);
   
       // Update tracking refs for date-based timer
       initialTimeLeftRef.current = initialTimer;
@@ -185,7 +185,7 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
     } else {
       const breakDuration = breakTimeOb[breakTime].time;
       setTime(breakDuration);
-      setSessionStartTime(breakDuration);
+      // setSessionStartTime(breakDuration);
   
       initialTimeLeftRef.current = breakDuration;
       startTimestampRef.current = null;

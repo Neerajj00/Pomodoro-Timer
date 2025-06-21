@@ -18,7 +18,7 @@ function Pomodoro() {
   useEffect(() => {
     setIsInitialState(true);
     setTime(1500);  // 25 minutes
-    setSessionStartTime(1500);
+    // setSessionStartTime(1500);
   }, []);
   
   

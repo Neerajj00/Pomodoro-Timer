@@ -34,13 +34,13 @@ function AdjustManuallyOverlay() {
     // 3. Update sessionStartTime and Time for currently active session
     if (breakTime === "Focus") {
       setTime(localBreakTimes["Focus"] * 60);
-      setSessionStartTime(localBreakTimes["Focus"] * 60);
+      // setSessionStartTime(localBreakTimes["Focus"] * 60);
     } else if (breakTime === "Short Break") {
       setTime(localBreakTimes["Short Break"] * 60);
-      setSessionStartTime(localBreakTimes["Short Break"] * 60);
+      // setSessionStartTime(localBreakTimes["Short Break"] * 60);
     } else if (breakTime === "Long Break") {
       setTime(localBreakTimes["Long Break"] * 60);
-      setSessionStartTime(localBreakTimes["Long Break"] * 60);
+      // setSessionStartTime(localBreakTimes["Long Break"] * 60);
     }
 
     // 4. Close overlay
