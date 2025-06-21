@@ -29,6 +29,25 @@ function EyeStrain202020() {
   const soundRef = useRef(null); // store sound reference
   const timerRef = useRef(null); // store interval ID
   const countdownRef = useRef(null); // store countdown interval
+
+  useEffect(() => {
+    if (TimeStarted) {
+      if (isInBreak.current) {
+        const minutes = String(Math.floor(CountDown / 60)).padStart(2, "0");
+        const seconds = String(CountDown % 60).padStart(2, "0");
+        document.title = `${minutes}:${seconds} left`;
+      } else {
+        const totalSeconds = RingingTime * 60;
+        const remaining = totalSeconds - time;
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+        const seconds = String(remaining % 60).padStart(2, "0");
+        document.title = `${minutes}:${seconds} remaining`;
+      }
+    } else {
+      document.title = "20:20:20 "; // fallback when paused/reset
+    }
+  }, [time, CountDown, TimeStarted]);
+  
   
   function playSound() {
     soundRef.current = new Audio(`/audio/${selectedSound}`);
