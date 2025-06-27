@@ -19,7 +19,6 @@ function RightPartOfPomodoro({isUsedForTimer , initialTimer}) {
     setIsInitialState,
     isWidthSmaller,
     isFullScreen,
-    setSessionStartTime,
     selectedSound,
     Time,
     setTime,
