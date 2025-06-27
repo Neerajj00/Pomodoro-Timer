@@ -114,7 +114,12 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
             <SettingButtonInTimer onClick={() => setTimerOverlay(true)} />
             <Button
               text={"Start Timer"}
-              disabled={parseInt(hour) + parseInt(minute) + parseInt(second) === 0}
+              disabled={
+                hour === "" ||
+                minute === "" ||
+                second === "" ||
+                (hour === "00" && minute === "00" && second === "00")
+              }
               classes={"bg-zinc-800"}
               isPlayButton={true}
               svg={<PlayButtonSVG />}
