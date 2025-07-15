@@ -115,8 +115,11 @@ function TimerInitialState({setIsInitialState,hour , setHour, minute, setMinute,
             <Button
               text={"Start Timer"}
               disabled={
-                true
+                (parseInt(hour || "0", 10) === 0) &&
+                (parseInt(minute || "0", 10) === 0) &&
+                (parseInt(second || "0", 10) === 0)
               }
+              
               classes={"bg-zinc-800"}
               isPlayButton={true}
               svg={<PlayButtonSVG />}
